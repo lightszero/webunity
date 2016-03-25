@@ -1,6 +1,10 @@
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
+library
+temp
+*.csproj
+*.sln
 
 # Folder config file
 Desktop.ini
@@ -9,13 +13,6 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
 
 # =========================
 # Operating System Files
