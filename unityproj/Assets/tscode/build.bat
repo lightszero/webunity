@@ -1,1 +1,1 @@
-tsc -p . --outFile ../.html/game.js  --sourceMap
+tsc

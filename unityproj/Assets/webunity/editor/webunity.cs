@@ -18,6 +18,7 @@ public class WebUnityWindow : EditorWindow
     void Build()
     {
         Process p = new Process();
+        //调用一个bat，可以免去我们寻找tsc的麻烦
         p.StartInfo = new ProcessStartInfo(codepath +"/build.bat");
         p.StartInfo.WorkingDirectory = codepath;
         p.StartInfo.CreateNoWindow = true;
