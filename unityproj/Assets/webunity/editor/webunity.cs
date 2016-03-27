@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEditor;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 public class WebUnityWindow : EditorWindow
 {
@@ -11,8 +12,9 @@ public class WebUnityWindow : EditorWindow
         var window = (WebUnityWindow)EditorWindow.GetWindow(typeof(WebUnityWindow), false, "Web ToolBar");
         window.Init();
     }
-    string[] outline;
+    List<string> outline =new List<string>();
     string codepath = Application.dataPath + "/tscode";
+    string buildjs = Application.dataPath + "/.html/game.js";
     void Build()
     {
         Process p = new Process();
@@ -25,8 +27,17 @@ public class WebUnityWindow : EditorWindow
         p.Start();
         p.WaitForExit();
         string txt = p.StandardOutput.ReadToEnd();
-        outline = txt.Split(new char[] { '\n' }, System.StringSplitOptions.None);
-
+        var info = txt.Split(new char[] { '\n' }, System.StringSplitOptions.None);
+        if(info.Length==3&& string.IsNullOrEmpty(info[2]))
+        {
+            outline.Add("Build OK.");
+        }
+        else
+        {
+            outline.AddRange(info);
+        }
+        string code = System.IO.File.ReadAllText(buildjs);
+        webunity.JSCenter.Instance.jsengine.Execute(code);
     }
     
     void RunHtml()
@@ -41,17 +52,15 @@ public class WebUnityWindow : EditorWindow
     {
         GUILayout.BeginHorizontal();
         {
-            if (GUILayout.Button("Build And Run"))
+            if (GUILayout.Button("Build Html"))
             {
-                Build();
-                RunHtml();
-            }
-            if (GUILayout.Button("Build Html Only"))
-            {
+                outline.Clear();
+
                 Build();
             }
-            if (GUILayout.Button("Run Html Only"))
+            if (GUILayout.Button("Run Html"))
             {
+                outline.Clear();
                 RunHtml();
             }
         }
@@ -80,7 +89,7 @@ public class WebUnityWindow : EditorWindow
         outlinepos = GUILayout.BeginScrollView(outlinepos);
         if (outline != null)
         {
-            for (int i = 0; i < outline.Length; i++)
+            for (int i = 0; i < outline.Count; i++)
             {
                 GUILayout.Label("out:" + outline[i]);
             }
