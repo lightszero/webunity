@@ -21,11 +21,14 @@ namespace webunity
             });
             //加入wi 命名空间
             jsengine.Global.FastAddProperty("wi", new Jint.Runtime.Interop.NamespaceReference(jsengine, "wi"), false, false, false);
+            jsengine.Global.FastAddProperty("BABYLON", new Jint.Runtime.Interop.NamespaceReference(jsengine, "BABYLON"), false, false, false);
 
             //增加函数
             System.Action<string> onc = (string txt) => { Debug.Log("<J>"+txt); };
             jsengine.SetValue("log", onc);
 
+
+            LoadJS();
         }
         static JSCenter g_this;
         public static JSCenter Instance
@@ -36,6 +39,13 @@ namespace webunity
                     g_this = new JSCenter();
                 return g_this;
             }
+        }
+        string buildjs = Application.dataPath + "/.html/game.js";
+
+        public void LoadJS()
+        {
+            string code = System.IO.File.ReadAllText(buildjs);
+            jsengine.Execute(code);
         }
 
     }

@@ -15,7 +15,7 @@ public class WebUnityWindow : EditorWindow
     List<string> outline =new List<string>();
     string codepath = Application.dataPath + "/tscode";
     string buildjs = Application.dataPath + "/.html/game.js";
-    void Build()
+    void BuildJS()
     {
         Process p = new Process();
         //调用一个bat，可以免去我们寻找tsc的麻烦
@@ -41,6 +41,11 @@ public class WebUnityWindow : EditorWindow
         webunity.JSCenter.Instance.jsengine.Execute(code);
     }
     
+    public void LoadJS()
+    {
+        string code = System.IO.File.ReadAllText(buildjs);
+        webunity.JSCenter.Instance.jsengine.Execute(code);
+    }
     void RunHtml()
     {
         string path = Application.dataPath + "/.html/index.html";
@@ -57,7 +62,7 @@ public class WebUnityWindow : EditorWindow
             {
                 outline.Clear();
 
-                Build();
+                BuildJS();
             }
             if (GUILayout.Button("Run Html"))
             {
