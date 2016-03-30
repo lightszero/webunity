@@ -6,9 +6,11 @@ class ab implements WI_Component
     obj: wi.GameObject;
     constructor()//尽量不要写构造器，成员初始化会由自动系统接手
     {
+        this.a1 = 5;
     }
     a1: number;
-    a2: string;
+    aa2: string;
+    a3: any;
     start()
     {
         

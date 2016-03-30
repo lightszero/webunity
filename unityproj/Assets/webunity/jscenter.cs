@@ -2,7 +2,7 @@
 using System.Collections;
 namespace wi//web interface
 {
-    
+
 }
 
 namespace webunity
@@ -24,7 +24,7 @@ namespace webunity
             jsengine.Global.FastAddProperty("BABYLON", new Jint.Runtime.Interop.NamespaceReference(jsengine, "BABYLON"), false, false, false);
 
             //增加函数
-            System.Action<string> onc = (string txt) => { Debug.Log("<J>"+txt); };
+            System.Action<string> onc = (string txt) => { Debug.Log("<J>" + txt); };
             jsengine.SetValue("log", onc);
 
 
@@ -42,10 +42,22 @@ namespace webunity
         }
         string buildjs = Application.dataPath + "/.html/game.js";
 
-        public void LoadJS()
+        public Jint.Native.Object.ObjectInstance NewObj(string name)
         {
-            string code = System.IO.File.ReadAllText(buildjs);
-            jsengine.Execute(code);
+
+             this.jsengine.Execute("new " + name + "();");
+            return this.jsengine.GetCompletionValue().AsObject();
+        }
+        public void LoadJS()
+
+        {
+            using (var s = System.IO.File.OpenRead(buildjs))
+            {
+                byte[] b = new byte[(int)s.Length];
+                s.Read(b, 0, b.Length);
+                string code = System.Text.Encoding.UTF8.GetString(b);
+                jsengine.Execute(code);
+            }
         }
 
     }
