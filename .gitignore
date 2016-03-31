@@ -4,8 +4,10 @@ ehthumbs.db
 library
 temp
 obj
-*.csproj
-*.sln
+bin
+
+#*.csproj
+#*.sln
 .vs
 # Folder config file
 Desktop.ini
@@ -40,3 +42,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 unityproj/.vs/unityproj/v14/.suo
+unityproj/Assembly-CSharp-Editor.csproj
+unityproj/Assembly-CSharp-firstpass.csproj
+unityproj/Assembly-CSharp.csproj
+unityproj/unityproj.sln
