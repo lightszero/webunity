@@ -72,7 +72,7 @@ namespace webunity
             var r = this.jsengine.GetCompletionValue().AsObject();
             return r;
         }
-        public Jint.Native.JsValue? GetStaticValue(string classname,string valuename)
+        public Jint.Native.JsValue? GetStaticValue(string classname, string valuename)
         {
             var jsvalue = jsengine.Global.GetProperty(classname).Value.Value;
             if (jsvalue.IsObject() == false)
@@ -105,80 +105,37 @@ namespace webunity
 
         }
 
-        public bool isjsbuild
-        {
-            get;
-            private set;
-        }
+
         public bool isjsload
         {
             get;
             private set;
         }
-        public bool jsNeedBuild
+        public void SetJsNeedLoad()
         {
-            get;
-            private set;
-        }
-        public System.DateTime lastBuild
-        {
-            get;
-            private set;
-        }
-        public void SetJsNeedBuild()
-        {
-            isjsbuild = false;
             isjsload = false;
-            jsNeedBuild = true;
         }
-        public static string codepath = Application.dataPath + "/tscode";
-        public static string buildjs = Application.dataPath + "/.html/game.js";
+        public const string loadjsfile = "html/game.js";
 
-        public bool BuildJS()
-        {
-            Process p = new Process();
-            //调用一个bat，可以免去我们寻找tsc的麻烦
-            p.StartInfo = new ProcessStartInfo(codepath + "/build.bat");
-            p.StartInfo.WorkingDirectory = codepath;
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.Start();
-            p.WaitForExit();
-            string txt = p.StandardOutput.ReadToEnd();
-            var info = txt.Split(new char[] { '\n' }, System.StringSplitOptions.None);
-            if (info.Length == 3 && string.IsNullOrEmpty(info[2]))
-            {
-                Log("<Build>Build OK.");
-                lastBuild = System.DateTime.Now;
-                LoadJS();
-                isjsbuild = true;
-                jsNeedBuild = false;
-                return true;
-            }
-            else
-            {
-                for (int i = 2; i < info.Length; i++)
-                {
-                    if (info[i] == "") continue;
-                    LogWarn("<Build>" + info[i]);
-                }
-                return false;
-            }
-        }
 
+        string _thecode = null;
+        string _themap = null;
         public void LoadJS()
         {
-            using (var s = System.IO.File.OpenRead(buildjs))
+            _thecode = (Resources.Load(loadjsfile) as TextAsset).text;
+            jsengine.Execute(_thecode);
+            try
             {
-                byte[] b = new byte[(int)s.Length];
-                s.Read(b, 0, b.Length);
-                string code = System.Text.Encoding.UTF8.GetString(b);
-                jsengine.Execute(code);
-                isjsload = true;
+                _themap = (Resources.Load(loadjsfile + ".map") as TextAsset).text;
             }
+            catch
+            {
+
+            }
+            isjsload = true;
         }
+
+
 
     }
 }

@@ -12,6 +12,68 @@ public class WebUnityWindow : EditorWindow
     {
         var window = (WebUnityWindow)EditorWindow.GetWindow(typeof(WebUnityWindow), false, "Web ToolBar");
     }
+    static bool isjsbuild;
+    static bool jsNeedBuild;
+    static System.DateTime lastBuild;
+
+    static void SetJsNeedBuild()
+    {
+        isjsbuild = false;
+        webunity.JSCenter.Instance.SetJsNeedLoad();
+        jsNeedBuild = true;
+    }
+    static string codepath = Application.dataPath + "/tscode";
+    static string buildjs = Application.dataPath + "/.html/game.js";
+
+    bool BuildJS()
+    {
+        Process p = new Process();
+        //调用一个bat，可以免去我们寻找tsc的麻烦
+        p.StartInfo = new ProcessStartInfo(codepath + "/build.bat");
+        p.StartInfo.WorkingDirectory = codepath;
+        p.StartInfo.CreateNoWindow = true;
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.Start();
+        p.WaitForExit();
+        string txt = p.StandardOutput.ReadToEnd();
+        var info = txt.Split(new char[] { '\n' }, System.StringSplitOptions.None);
+        if (info.Length == 3 && string.IsNullOrEmpty(info[2]))
+        {
+            webunity.JSCenter.Log("<Build>Build OK.");
+            lastBuild = System.DateTime.Now;
+            webunity.JSCenter.Instance.LoadJS();
+            isjsbuild = true;
+            jsNeedBuild = false;
+            return true;
+
+            if (System.IO.Directory.Exists(Application.dataPath + "/resources/html") == false)
+            {
+                System.IO.Directory.CreateDirectory(Application.dataPath + "/resources/html");
+            }
+            System.IO.File.Delete(Application.dataPath + "/resources/" + webunity.JSCenter.loadjsfile + ".txt");
+            System.IO.File.Copy(buildjs, Application.dataPath + "/resources/" + webunity.JSCenter.loadjsfile + ".txt");
+            try
+            {
+                System.IO.File.Delete(Application.dataPath + "/resources/" + webunity.JSCenter.loadjsfile + ".map.txt");
+                System.IO.File.Copy(buildjs + ".map", Application.dataPath + "/resources/" + webunity.JSCenter.loadjsfile + ".map.txt");
+            }
+            catch
+            {
+            }
+            AssetDatabase.Refresh();
+        }
+        else
+        {
+            for (int i = 2; i < info.Length; i++)
+            {
+                if (info[i] == "") continue;
+                webunity.JSCenter.LogWarn("<Build>" + info[i]);
+            }
+            return false;
+        }
+    }
 
     void RunHtml()
     {
@@ -33,7 +95,7 @@ public class WebUnityWindow : EditorWindow
         else
         //head ui
         {
-            if (webunity.JSCenter.Instance.jsNeedBuild || webunity.JSCenter.Instance.isjsbuild == false)
+            if (jsNeedBuild || isjsbuild == false)
             {
                 var oldc = GUI.color;
                 GUI.color = Color.yellow;
@@ -45,7 +107,7 @@ public class WebUnityWindow : EditorWindow
                 var oldc = GUI.color;
 
                 GUI.color = Color.green;
-                var time = webunity.JSCenter.Instance.lastBuild;
+                var time = lastBuild;
                 GUILayout.TextField("last Build at " + time.Hour + ":" + time.Minute + ":" + time.Second);
                 GUI.color = oldc;
 
@@ -56,7 +118,7 @@ public class WebUnityWindow : EditorWindow
                 if (GUILayout.Button("Build JS"))
                 {
                     webunity.JSCenter.jslog.Clear();
-                    bool b = webunity.JSCenter.Instance.BuildJS();
+                    bool b = BuildJS();
                 }
                 if (GUILayout.Button("Run Html"))
                 {
@@ -123,7 +185,7 @@ public class WebUnityWindow : EditorWindow
     {
         GUILayout.Label("CodeFile Here.");
 
-        var files = System.IO.Directory.GetFiles(webunity.JSCenter.codepath, "*.ts");
+        var files = System.IO.Directory.GetFiles(codepath, "*.ts");
         GUILayout.BeginHorizontal();
         {
             GUILayout.Space(50);
@@ -131,7 +193,7 @@ public class WebUnityWindow : EditorWindow
             foreach (var f in files)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(f.Substring(webunity.JSCenter.codepath.Length + 1));
+                GUILayout.Label(f.Substring(codepath.Length + 1));
                 if (GUILayout.Button("edit", GUILayout.Width(150)))
                 {
                     EditorUtility.OpenWithDefaultApp(f);
@@ -153,12 +215,12 @@ public class WebUnityWindow : EditorWindow
         if (bInit) return;
         UnityEngine.Debug.LogWarning("init tscode filewatcher"); //监控 tscode 文件夹
 
-        fwatcher = new System.IO.FileSystemWatcher(webunity.JSCenter.codepath);
+        fwatcher = new System.IO.FileSystemWatcher(codepath);
         fwatcher.IncludeSubdirectories = true;
         fwatcher.EnableRaisingEvents = true;
         FileSystemEventHandler eh = (s, e) =>
          {
-             webunity.JSCenter.Instance.SetJsNeedBuild();
+             SetJsNeedBuild();
          };
         fwatcher.Changed += eh;
         fwatcher.Created += eh;
