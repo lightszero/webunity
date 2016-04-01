@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEditor;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.IO;
 
 public class WebUnityWindow : EditorWindow
 {
@@ -10,42 +11,8 @@ public class WebUnityWindow : EditorWindow
     private static void ShowWin()
     {
         var window = (WebUnityWindow)EditorWindow.GetWindow(typeof(WebUnityWindow), false, "Web ToolBar");
-        window.Init();
     }
-    List<string> outline =new List<string>();
-    string codepath = Application.dataPath + "/tscode";
-    string buildjs = Application.dataPath + "/.html/game.js";
-    void BuildJS()
-    {
-        Process p = new Process();
-        //调用一个bat，可以免去我们寻找tsc的麻烦
-        p.StartInfo = new ProcessStartInfo(codepath +"/build.bat");
-        p.StartInfo.WorkingDirectory = codepath;
-        p.StartInfo.CreateNoWindow = true;
-        p.StartInfo.UseShellExecute = false;
-        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        p.StartInfo.RedirectStandardOutput = true;
-        p.Start();
-        p.WaitForExit();
-        string txt = p.StandardOutput.ReadToEnd();
-        var info = txt.Split(new char[] { '\n' }, System.StringSplitOptions.None);
-        if(info.Length==3&& string.IsNullOrEmpty(info[2]))
-        {
-            outline.Add("Build OK.");
-        }
-        else
-        {
-            outline.AddRange(info);
-        }
-        string code = System.IO.File.ReadAllText(buildjs);
-        webunity.JSCenter.Instance.jsengine.Execute(code);
-    }
-    
-    public void LoadJS()
-    {
-        string code = System.IO.File.ReadAllText(buildjs);
-        webunity.JSCenter.Instance.jsengine.Execute(code);
-    }
+
     void RunHtml()
     {
         string path = Application.dataPath + "/.html/index.html";
@@ -56,54 +23,148 @@ public class WebUnityWindow : EditorWindow
     Vector2 codepos = Vector2.zero;
     public void OnGUI()
     {
-        GUILayout.BeginHorizontal();
-        {
-            if (GUILayout.Button("Build Html"))
-            {
-                outline.Clear();
 
-                BuildJS();
-            }
-            if (GUILayout.Button("Run Html"))
-            {
-                outline.Clear();
-                RunHtml();
-            }
+        SureInitStatic();
+
+        if (Application.isPlaying)
+        {
+            GUILayout.Label("in Player Mode.");
         }
-        GUILayout.EndHorizontal();
-
-        GUILayout.Space(4);
-        GUILayout.Label("CodeFile Here.");
-
-        var files = System.IO.Directory.GetFiles(codepath, "*.ts");
-
-        codepos = GUILayout.BeginScrollView(codepos);
-        foreach (var f in files)
+        else
+        //head ui
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(f.Substring(codepath.Length+1));
-            if (GUILayout.Button("edit"))
+            if (webunity.JSCenter.Instance.jsNeedBuild || webunity.JSCenter.Instance.isjsbuild == false)
             {
-                EditorUtility.OpenWithDefaultApp(f);
+                var oldc = GUI.color;
+                GUI.color = Color.yellow;
+                GUILayout.TextField("need Build");
+                GUI.color = oldc;
+            }
+            else
+            {
+                var oldc = GUI.color;
+
+                GUI.color = Color.green;
+                var time = webunity.JSCenter.Instance.lastBuild;
+                GUILayout.TextField("last Build at " + time.Hour + ":" + time.Minute + ":" + time.Second);
+                GUI.color = oldc;
+
+            }
+            GUILayout.BeginHorizontal();
+            {
+
+                if (GUILayout.Button("Build JS"))
+                {
+                    webunity.JSCenter.jslog.Clear();
+                    bool b = webunity.JSCenter.Instance.BuildJS();
+                }
+                if (GUILayout.Button("Run Html"))
+                {
+                    webunity.JSCenter.jslog.Clear();
+                    RunHtml();
+                }
             }
             GUILayout.EndHorizontal();
         }
-        GUILayout.EndScrollView();
 
         GUILayout.Space(4);
-        GUILayout.Label("LogInfo Here.");
-        outlinepos = GUILayout.BeginScrollView(outlinepos);
-        if (outline != null)
-        {
-            for (int i = 0; i < outline.Count; i++)
-            {
-                GUILayout.Label("out:" + outline[i]);
-            }
-        }
-        GUILayout.EndScrollView();
+
+        GUI_TSCODE();
+
+        GUILayout.Space(4);
+
+        GUI_Log();
     }
-    public void Init()
+
+    private void GUI_Log()
     {
+        GUILayout.Label("LogInfo Here.");
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.Space(50);
+
+            outlinepos = GUILayout.BeginScrollView(outlinepos);
+            if (webunity.JSCenter.jslog != null)
+            {
+                foreach (var l in webunity.JSCenter.jslog)
+                {
+
+                    if (l.Length > 0 && l[0] == '!')
+                    {
+                        var oldc = GUI.color;
+                        GUI.color = Color.red;
+                        string line = l.Substring(1);
+                        GUILayout.TextField(line);
+                        GUI.color = oldc;
+                    }
+                    else if (l.Length > 0 && l[0] == '?')
+                    {
+                        var oldc = GUI.color;
+                        GUI.color = Color.yellow;
+                        string line = l.Substring(1);
+                        GUILayout.TextField(line);
+                        GUI.color = oldc;
+                    }
+                    else
+                    {
+                        GUILayout.TextField(l);
+                    }
+                }
+            }
+            GUILayout.EndScrollView();
+            GUILayout.Space(50);
+
+        }
+        GUILayout.EndHorizontal();
+
+    }
+
+    private void GUI_TSCODE()
+    {
+        GUILayout.Label("CodeFile Here.");
+
+        var files = System.IO.Directory.GetFiles(webunity.JSCenter.codepath, "*.ts");
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.Space(50);
+            codepos = GUILayout.BeginScrollView(codepos);
+            foreach (var f in files)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(f.Substring(webunity.JSCenter.codepath.Length + 1));
+                if (GUILayout.Button("edit", GUILayout.Width(150)))
+                {
+                    EditorUtility.OpenWithDefaultApp(f);
+                }
+                GUILayout.EndHorizontal();
+            }
+
+            GUILayout.EndScrollView();
+            GUILayout.Space(50);
+
+        }
+        GUILayout.EndHorizontal();
+    }
+
+    static System.IO.FileSystemWatcher fwatcher;
+    public static bool bInit = false;
+    public static void SureInitStatic()
+    {
+        if (bInit) return;
+        UnityEngine.Debug.LogWarning("init tscode filewatcher"); //监控 tscode 文件夹
+
+        fwatcher = new System.IO.FileSystemWatcher(webunity.JSCenter.codepath);
+        fwatcher.IncludeSubdirectories = true;
+        fwatcher.EnableRaisingEvents = true;
+        FileSystemEventHandler eh = (s, e) =>
+         {
+             webunity.JSCenter.Instance.SetJsNeedBuild();
+         };
+        fwatcher.Changed += eh;
+        fwatcher.Created += eh;
+        fwatcher.Deleted += eh;
+
+        bInit = true;
 
     }
 }
