@@ -5,11 +5,11 @@ using System;
 
 public class com_javascript : MonoBehaviour
 {
-    public string classname;
-    Jint.Native.Object.ObjectInstance inst = null;
-    // Use this for initialization
-    public string jsoninfo;
-    Jint.Native.Object.ObjectInstance instjson = null;
+    public string classname;// javascript 函数名
+    public string jsoninfo; // 保存的序列化数据
+
+    Jint.Native.Object.ObjectInstance inst = null;//绑定的js对象
+    Jint.Native.Object.ObjectInstance instjson = null;//中转用的数据对象，临时对象，考虑是否弃用临时对象
     public Jint.Native.JsValue? GetProp(string name)
     {
         if (instjson == null)
@@ -21,28 +21,22 @@ public class com_javascript : MonoBehaviour
     {
         if (instjson == null)
             instjson = new Jint.Native.Object.ObjectInstance(webunity.JSCenter.Instance.jsengine);
+        if (instjson.HasProperty(name) == false)
+            instjson.FastAddProperty(name, v, true, true, true);
         instjson.Put(name, v, true);
+        jsoninfo = webunity.JSCenter.Instance.ToJsonString(instjson);
     }
     public void SetProp(string name, bool obj)
     {
-        if (instjson == null)
-            instjson = new Jint.Native.Object.ObjectInstance(webunity.JSCenter.Instance.jsengine);
-
-        Jint.Native.JsValue v = new JsValue(obj);
-        instjson.Put(name, v, true);
+        SetProp(name, new JsValue(obj));
     }
     public void SetProp(string name, double obj)
     {
-        Jint.Native.JsValue v = new JsValue(obj);
-        inst.Put(name, v, true);
-
+        SetProp(name, new JsValue(obj));
     }
     public void SetProp(string name, string obj)
     {
-
-        Jint.Native.JsValue v = new JsValue(obj);
-        inst.Put(name, v, true);
-
+        SetProp(name, new JsValue(obj));
     }
     void Start()
     {
@@ -51,7 +45,8 @@ public class com_javascript : MonoBehaviour
         var go = new wi.GameObject(this.gameObject);
         var obj = new Jint.Runtime.Interop.ObjectWrapper(webunity.JSCenter.Instance.jsengine, go);
         inst.Put("obj", new JsValue(obj), true);
-        //js 需要对应的脚本有一个obj属性
+
+        //然后要把instjson里面的值一个个丢进去，这里还是弄个myjson方便
     }
 
     // Update is called once per frame

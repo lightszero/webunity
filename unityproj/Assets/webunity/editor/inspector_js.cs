@@ -54,7 +54,7 @@ public class Animator_Inspector : Editor
             string json = webunity.JSCenter.Instance.ToJsonString(jsvalue.Value);
             GUILayout.TextField("param:" + json);
         }
-
+        GUILayout.TextField("saveddata:" + js.jsoninfo);
         foreach (var p in jsvalue.Value.AsObject().GetOwnProperties())
         {
             string type = p.Value.Value.Value.AsString();
@@ -114,9 +114,9 @@ public class Animator_Inspector : Editor
             try
             {
                 string comp = p.Key;
-                var pp = obj.GetProperty("_wi_export").Value.Value;
-                var serializer = new JsonSerializer(webunity.JSCenter.Instance.jsengine);
-                var tjson = serializer.Serialize(pp, Jint.Native.Undefined.Instance, Jint.Native.Undefined.Instance);
+                //var pp = obj.GetProperty("_wi_export").Value.Value;
+                //var serializer = new JsonSerializer(webunity.JSCenter.Instance.jsengine);
+                //var tjson = serializer.Serialize(pp, Jint.Native.Undefined.Instance, Jint.Native.Undefined.Instance);
                 //GUILayout.Label(p.Key + "|" + tjson.AsString());
                 listClass.Add(p.Key);
             }
