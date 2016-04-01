@@ -4,10 +4,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Jint.Native.Json;
 
-namespace wi//web interface
-{
-
-}
 
 namespace webunity
 {

@@ -83,6 +83,7 @@ public class WebUnityWindow : EditorWindow
     }
     Vector2 outlinepos = Vector2.zero;
     Vector2 codepos = Vector2.zero;
+    bool autobuild = false;
     public void OnGUI()
     {
 
@@ -101,6 +102,12 @@ public class WebUnityWindow : EditorWindow
                 GUI.color = Color.yellow;
                 GUILayout.TextField("need Build");
                 GUI.color = oldc;
+                if(autobuild)
+                {
+                    BuildJS();
+                    this.Repaint();
+                    //rern;
+                }
             }
             else
             {
@@ -115,12 +122,14 @@ public class WebUnityWindow : EditorWindow
             GUILayout.BeginHorizontal();
             {
 
-                if (GUILayout.Button("Build JS"))
+                if (GUILayout.Button("Build JS",GUILayout.Width(100)))
                 {
                     webunity.JSCenter.jslog.Clear();
                     bool b = BuildJS();
                 }
-                if (GUILayout.Button("Run Html"))
+                autobuild = GUILayout.Toggle(autobuild, "AutoBuild", GUILayout.Width(100));
+
+                if (GUILayout.Button("Run Html", GUILayout.Width(100)))
                 {
                     webunity.JSCenter.jslog.Clear();
                     RunHtml();
@@ -194,9 +203,13 @@ public class WebUnityWindow : EditorWindow
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(f.Substring(codepath.Length + 1));
-                if (GUILayout.Button("edit", GUILayout.Width(150)))
+                if (GUILayout.Button("edit(def tool)", GUILayout.Width(100)))
                 {
                     EditorUtility.OpenWithDefaultApp(f);
+                }
+                if (GUILayout.Button("edit(lowb)", GUILayout.Width(80)))
+                {
+                    QuickEditorWindow.Show(f);
                 }
                 GUILayout.EndHorizontal();
             }

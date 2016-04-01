@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Assets\webunity\editor\inspector_js.cs" />
     <Compile Include="Assets\webunity\editor\picker.cs" />
+    <Compile Include="Assets\webunity\editor\quickeditor.cs" />
     <Compile Include="Assets\webunity\editor\webunity.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,7 @@ var ab = (function () {
         t.y += 30 * delta;
         this.obj.SetRotate(t);
     };
-    //固定名称_exportdata,表示导出的数据,有导出数据就会被认为是一个组件
+    //qq1 //固定名称_exportdata,表示导出的数据,有导出数据就会被认为是一个组件
     ab._wi_export = { "a1": "int", "a2": "string" };
     return ab;
 })();

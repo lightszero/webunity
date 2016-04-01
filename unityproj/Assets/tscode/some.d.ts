@@ -6,7 +6,7 @@ declare module BABYLON
         x: number;
         y: number;
         z: number;
-    }
+    }//1//2
 }
 declare module wi
 {
