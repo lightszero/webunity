@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DC50D542-EBA4-49CD-B285-76C705F73067}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>cscodetest</RootNamespace>
+    <AssemblyName>cscodetest</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="bin\csproj\AnimationBlendMode.cs" />
+    <Compile Include="bin\csproj\AnimationCullingType.cs" />
+    <Compile Include="bin\csproj\AnimationPlayMode.cs" />
+    <Compile Include="bin\csproj\AnimatorControllerParameterType.cs" />
+    <Compile Include="bin\csproj\AnimatorCullingMode.cs" />
+    <Compile Include="bin\csproj\AnimatorRecorderMode.cs" />
+    <Compile Include="bin\csproj\AnimatorUpdateMode.cs" />
+    <Compile Include="bin\csproj\AnisotropicFiltering.cs" />
+    <Compile Include="bin\csproj\ApplicationInstallMode.cs" />
+    <Compile Include="bin\csproj\ApplicationSandboxType.cs" />
+    <Compile Include="bin\csproj\AudioClipLoadType.cs" />
+    <Compile Include="bin\csproj\AudioCompressionFormat.cs" />
+    <Compile Include="bin\csproj\AudioDataLoadState.cs" />
+    <Compile Include="bin\csproj\AudioReverbPreset.cs" />
+    <Compile Include="bin\csproj\AudioRolloffMode.cs" />
+    <Compile Include="bin\csproj\AudioSourceCurveType.cs" />
+    <Compile Include="bin\csproj\AudioSpeakerMode.cs" />
+    <Compile Include="bin\csproj\AudioType.cs" />
+    <Compile Include="bin\csproj\AudioVelocityUpdateMode.cs" />
+    <Compile Include="bin\csproj\AvatarIKGoal.cs" />
+    <Compile Include="bin\csproj\AvatarIKHint.cs" />
+    <Compile Include="bin\csproj\AvatarTarget.cs" />
+    <Compile Include="bin\csproj\BlendWeights.cs" />
+    <Compile Include="bin\csproj\CameraClearFlags.cs" />
+    <Compile Include="bin\csproj\CameraType.cs" />
+    <Compile Include="bin\csproj\CollisionDetectionMode.cs" />
+    <Compile Include="bin\csproj\CollisionDetectionMode2D.cs" />
+    <Compile Include="bin\csproj\CollisionFlags.cs" />
+    <Compile Include="bin\csproj\ColorSpace.cs" />
+    <Compile Include="bin\csproj\ComputeBufferType.cs" />
+    <Compile Include="bin\csproj\ConfigurableJointMotion.cs" />
+    <Compile Include="bin\csproj\ConnectionTesterStatus.cs" />
+    <Compile Include="bin\csproj\CubemapFace.cs" />
+    <Compile Include="bin\csproj\CursorLockMode.cs" />
+    <Compile Include="bin\csproj\CursorMode.cs" />
+    <Compile Include="bin\csproj\DepthTextureMode.cs" />
+    <Compile Include="bin\csproj\DetailRenderMode.cs" />
+    <Compile Include="bin\csproj\DeviceOrientation.cs" />
+    <Compile Include="bin\csproj\DeviceType.cs" />
+    <Compile Include="bin\csproj\DrivenTransformProperties.cs" />
+    <Compile Include="bin\csproj\EffectorForceMode2D.cs" />
+    <Compile Include="bin\csproj\EffectorSelection2D.cs" />
+    <Compile Include="bin\csproj\EventModifiers.cs" />
+    <Compile Include="bin\csproj\Events.PersistentListenerMode.cs" />
+    <Compile Include="bin\csproj\Events.UnityEventCallState.cs" />
+    <Compile Include="bin\csproj\EventType.cs" />
+    <Compile Include="bin\csproj\Experimental.Director.DirectorUpdateMode.cs" />
+    <Compile Include="bin\csproj\Experimental.Director.PlayState.cs" />
+    <Compile Include="bin\csproj\Experimental.Networking.UnityWebRequest_UnityWebRequestError.cs" />
+    <Compile Include="bin\csproj\Experimental.Networking.UnityWebRequest_UnityWebRequestMethod.cs" />
+    <Compile Include="bin\csproj\FFTWindow.cs" />
+    <Compile Include="bin\csproj\FilterMode.cs" />
+    <Compile Include="bin\csproj\FocusType.cs" />
+    <Compile Include="bin\csproj\FogMode.cs" />
+    <Compile Include="bin\csproj\FontStyle.cs" />
+    <Compile Include="bin\csproj\ForceMode.cs" />
+    <Compile Include="bin\csproj\ForceMode2D.cs" />
+    <Compile Include="bin\csproj\GITextureType.cs" />
+    <Compile Include="bin\csproj\GUILayoutOption_Type.cs" />
+    <Compile Include="bin\csproj\HideFlags.cs" />
+    <Compile Include="bin\csproj\HorizontalWrapMode.cs" />
+    <Compile Include="bin\csproj\HumanBodyBones.cs" />
+    <Compile Include="bin\csproj\ImagePosition.cs" />
+    <Compile Include="bin\csproj\IMECompositionMode.cs" />
+    <Compile Include="bin\csproj\JointDriveMode.cs" />
+    <Compile Include="bin\csproj\JointLimitState2D.cs" />
+    <Compile Include="bin\csproj\JointProjectionMode.cs" />
+    <Compile Include="bin\csproj\KeyCode.cs" />
+    <Compile Include="bin\csproj\LightmapsMode.cs" />
+    <Compile Include="bin\csproj\LightmapsModeLegacy.cs" />
+    <Compile Include="bin\csproj\LightmapType.cs" />
+    <Compile Include="bin\csproj\LightRenderMode.cs" />
+    <Compile Include="bin\csproj\LightShadows.cs" />
+    <Compile Include="bin\csproj\LightType.cs" />
+    <Compile Include="bin\csproj\LocationServiceStatus.cs" />
+    <Compile Include="bin\csproj\LODFadeMode.cs" />
+    <Compile Include="bin\csproj\LogType.cs" />
+    <Compile Include="bin\csproj\MasterServerEvent.cs" />
+    <Compile Include="bin\csproj\MaterialGlobalIlluminationFlags.cs" />
+    <Compile Include="bin\csproj\MeshTopology.cs" />
+    <Compile Include="bin\csproj\NavMeshObstacleShape.cs" />
+    <Compile Include="bin\csproj\NavMeshPathStatus.cs" />
+    <Compile Include="bin\csproj\NetworkConnectionError.cs" />
+    <Compile Include="bin\csproj\NetworkDisconnection.cs" />
+    <Compile Include="bin\csproj\Networking.NetworkError.cs" />
+    <Compile Include="bin\csproj\Networking.NetworkEventType.cs" />
+    <Compile Include="bin\csproj\Networking.QosType.cs" />
+    <Compile Include="bin\csproj\Networking.ReactorModel.cs" />
+    <Compile Include="bin\csproj\Networking.Types.AppID.cs" />
+    <Compile Include="bin\csproj\Networking.Types.NetworkAccessLevel.cs" />
+    <Compile Include="bin\csproj\Networking.Types.NetworkID.cs" />
+    <Compile Include="bin\csproj\Networking.Types.NodeID.cs" />
+    <Compile Include="bin\csproj\Networking.Types.SourceID.cs" />
+    <Compile Include="bin\csproj\NetworkLogLevel.cs" />
+    <Compile Include="bin\csproj\NetworkPeerType.cs" />
+    <Compile Include="bin\csproj\NetworkReachability.cs" />
+    <Compile Include="bin\csproj\NetworkStateSynchronization.cs" />
+    <Compile Include="bin\csproj\NPOTSupport.cs" />
+    <Compile Include="bin\csproj\ObstacleAvoidanceType.cs" />
+    <Compile Include="bin\csproj\OffMeshLinkType.cs" />
+    <Compile Include="bin\csproj\ParticleRenderMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemAnimationType.cs" />
+    <Compile Include="bin\csproj\ParticleSystemCollisionMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemCollisionQuality.cs" />
+    <Compile Include="bin\csproj\ParticleSystemCollisionType.cs" />
+    <Compile Include="bin\csproj\ParticleSystemCurveMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemEmissionType.cs" />
+    <Compile Include="bin\csproj\ParticleSystemGradientMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemInheritVelocityMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemMeshShapeType.cs" />
+    <Compile Include="bin\csproj\ParticleSystemRenderMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemRenderSpace.cs" />
+    <Compile Include="bin\csproj\ParticleSystemScalingMode.cs" />
+    <Compile Include="bin\csproj\ParticleSystemShapeType.cs" />
+    <Compile Include="bin\csproj\ParticleSystemSimulationSpace.cs" />
+    <Compile Include="bin\csproj\ParticleSystemSortMode.cs" />
+    <Compile Include="bin\csproj\PhysicMaterialCombine.cs" />
+    <Compile Include="bin\csproj\PlayMode.cs" />
+    <Compile Include="bin\csproj\PrimitiveType.cs" />
+    <Compile Include="bin\csproj\ProceduralCacheSize.cs" />
+    <Compile Include="bin\csproj\ProceduralLoadingBehavior.cs" />
+    <Compile Include="bin\csproj\ProceduralOutputType.cs" />
+    <Compile Include="bin\csproj\ProceduralProcessorUsage.cs" />
+    <Compile Include="bin\csproj\ProceduralPropertyType.cs" />
+    <Compile Include="bin\csproj\QualityLevel.cs" />
+    <Compile Include="bin\csproj\QueryTriggerInteraction.cs" />
+    <Compile Include="bin\csproj\QueueMode.cs" />
+    <Compile Include="bin\csproj\RectTransform_Axis.cs" />
+    <Compile Include="bin\csproj\RectTransform_Edge.cs" />
+    <Compile Include="bin\csproj\Rendering.AmbientMode.cs" />
+    <Compile Include="bin\csproj\Rendering.BlendMode.cs" />
+    <Compile Include="bin\csproj\Rendering.BlendOp.cs" />
+    <Compile Include="bin\csproj\Rendering.BuiltinRenderTextureType.cs" />
+    <Compile Include="bin\csproj\Rendering.BuiltinShaderMode.cs" />
+    <Compile Include="bin\csproj\Rendering.BuiltinShaderType.cs" />
+    <Compile Include="bin\csproj\Rendering.CameraEvent.cs" />
+    <Compile Include="bin\csproj\Rendering.ColorWriteMask.cs" />
+    <Compile Include="bin\csproj\Rendering.CompareFunction.cs" />
+    <Compile Include="bin\csproj\Rendering.CullMode.cs" />
+    <Compile Include="bin\csproj\Rendering.DefaultReflectionMode.cs" />
+    <Compile Include="bin\csproj\Rendering.GraphicsDeviceType.cs" />
+    <Compile Include="bin\csproj\Rendering.LightEvent.cs" />
+    <Compile Include="bin\csproj\Rendering.OpaqueSortMode.cs" />
+    <Compile Include="bin\csproj\Rendering.PassType.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionCubemapCompression.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionProbeClearFlags.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionProbeMode.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionProbeRefreshMode.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionProbeTimeSlicingMode.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionProbeType.cs" />
+    <Compile Include="bin\csproj\Rendering.ReflectionProbeUsage.cs" />
+    <Compile Include="bin\csproj\Rendering.RenderBufferLoadAction.cs" />
+    <Compile Include="bin\csproj\Rendering.RenderBufferStoreAction.cs" />
+    <Compile Include="bin\csproj\Rendering.ShadowCastingMode.cs" />
+    <Compile Include="bin\csproj\Rendering.ShadowSamplingMode.cs" />
+    <Compile Include="bin\csproj\Rendering.StencilOp.cs" />
+    <Compile Include="bin\csproj\RenderingPath.cs" />
+    <Compile Include="bin\csproj\RenderMode.cs" />
+    <Compile Include="bin\csproj\RenderTextureFormat.cs" />
+    <Compile Include="bin\csproj\RenderTextureReadWrite.cs" />
+    <Compile Include="bin\csproj\RigidbodyConstraints.cs" />
+    <Compile Include="bin\csproj\RigidbodyConstraints2D.cs" />
+    <Compile Include="bin\csproj\RigidbodyInterpolation.cs" />
+    <Compile Include="bin\csproj\RigidbodyInterpolation2D.cs" />
+    <Compile Include="bin\csproj\RigidbodySleepMode2D.cs" />
+    <Compile Include="bin\csproj\RotationDriveMode.cs" />
+    <Compile Include="bin\csproj\RPCMode.cs" />
+    <Compile Include="bin\csproj\RuntimeInitializeLoadType.cs" />
+    <Compile Include="bin\csproj\RuntimePlatform.cs" />
+    <Compile Include="bin\csproj\ScaleMode.cs" />
+    <Compile Include="bin\csproj\SceneManagement.LoadSceneMode.cs" />
+    <Compile Include="bin\csproj\ScreenOrientation.cs" />
+    <Compile Include="bin\csproj\SendMessageOptions.cs" />
+    <Compile Include="bin\csproj\ShadowProjection.cs" />
+    <Compile Include="bin\csproj\SkinQuality.cs" />
+    <Compile Include="bin\csproj\SocialPlatforms.TimeScope.cs" />
+    <Compile Include="bin\csproj\SocialPlatforms.UserScope.cs" />
+    <Compile Include="bin\csproj\SocialPlatforms.UserState.cs" />
+    <Compile Include="bin\csproj\Space.cs" />
+    <Compile Include="bin\csproj\SpriteAlignment.cs" />
+    <Compile Include="bin\csproj\SpriteMeshType.cs" />
+    <Compile Include="bin\csproj\SpritePackingMode.cs" />
+    <Compile Include="bin\csproj\SpritePackingRotation.cs" />
+    <Compile Include="bin\csproj\StackTraceLogType.cs" />
+    <Compile Include="bin\csproj\SystemLanguage.cs" />
+    <Compile Include="bin\csproj\TerrainRenderFlags.cs" />
+    <Compile Include="bin\csproj\Terrain_MaterialType.cs" />
+    <Compile Include="bin\csproj\TexGenMode.cs" />
+    <Compile Include="bin\csproj\TextAlignment.cs" />
+    <Compile Include="bin\csproj\TextAnchor.cs" />
+    <Compile Include="bin\csproj\TextClipping.cs" />
+    <Compile Include="bin\csproj\TextEditor_CharacterType.cs" />
+    <Compile Include="bin\csproj\TextEditor_DblClickSnapping.cs" />
+    <Compile Include="bin\csproj\TextEditor_TextEditOp.cs" />
+    <Compile Include="bin\csproj\TextureFormat.cs" />
+    <Compile Include="bin\csproj\TextureWrapMode.cs" />
+    <Compile Include="bin\csproj\ThreadPriority.cs" />
+    <Compile Include="bin\csproj\TouchPhase.cs" />
+    <Compile Include="bin\csproj\TouchScreenKeyboardType.cs" />
+    <Compile Include="bin\csproj\TouchType.cs" />
+    <Compile Include="bin\csproj\TransparencySortMode.cs" />
+    <Compile Include="bin\csproj\TypeInferenceRules.cs" />
+    <Compile Include="bin\csproj\UserAuthorization.cs" />
+    <Compile Include="bin\csproj\VerticalWrapMode.cs" />
+    <Compile Include="bin\csproj\VR.VRDeviceType.cs" />
+    <Compile Include="bin\csproj\VR.VRNode.cs" />
+    <Compile Include="bin\csproj\WebCamFlags.cs" />
+    <Compile Include="bin\csproj\WindZoneMode.cs" />
+    <Compile Include="bin\csproj\WrapMode.cs" />
+    <Compile Include="recallunity\exportattr\exportattr.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

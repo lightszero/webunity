@@ -52,9 +52,11 @@ namespace recallunity
 
         Dictionary<string, BuildInfo> buildinfo = new Dictionary<string, BuildInfo>();
 
+        public NameSpaceFilter filter;
         public void ExportProj(NameSpaceFilter filter, string csprojpath, string tsprojpath)
         {
             logger.Log("==>Call ExportProj");
+            this.filter = filter;
             string cspath = System.IO.Path.GetFullPath(csprojpath);
             if (System.IO.Directory.Exists(cspath) == false)
                 System.IO.Directory.CreateDirectory(cspath);
@@ -179,6 +181,8 @@ namespace recallunity
             }
             return true;
         }
+
+        //先检查，再导出
         void TryExport(string type, string csfilepath, string tsfilepath)
         {
 
@@ -191,11 +195,73 @@ namespace recallunity
 
             DoExport(type, csfilepath, tsfilepath);
         }
+        //核心方法
         void DoExport(string type, string csfilepath, string tsfilepath)
         {
+            NewStr();
+            var def = infos[type].def;
+
+            if (infos[type].type == TypeInfo.Typetype.type_enum)
+            {
+                string _namespace = def.Namespace;
+                string name = def.Name;
+                if(def.Namespace=="")
+                {
+                    _namespace=def.DeclaringType.Namespace;
+                    name = def.DeclaringType.Name + "_" + def.Name;
+                }
+                AppendLine("namespace " + _namespace);
+                AppendLine("{");
+                {
+                    AddSpace();
+                    AppendLine("public enum " + name);
+                    AppendLine("{");
+                    {
+                        AddSpace();
+                        for (int i = 1; i < def.Fields.Count; i++)
+                        {
+                            AppendLine(def.Fields[i].Name + " = " + def.Fields[i].Constant + ",");
+                        }
+                        DecSpace();
+                    }
+                    AppendLine("}");
+                    DecSpace();
+                }
+                AppendLine("}");
+                string outcs = GetStr();
+                System.IO.File.Delete(csfilepath);
+                System.IO.File.WriteAllText(csfilepath, outcs);
+            }
 
         }
-
+        static StringBuilder sbuilder;
+        static void NewStr()
+        {
+            sbuilder = new StringBuilder();
+        }
+        static string GetStr()
+        {
+            return sbuilder.ToString();
+        }
+        static int space = 0;
+        static void AddSpace()
+        {
+            space += 4;
+        }
+        static void DecSpace()
+        {
+            space -= 4;
+        }
+        static void AppendLine(string text)
+        {
+            for (int i = 0; i < space; i++)
+            {
+                sbuilder.Append(" ");
+            }
+            sbuilder.Append(text);
+            sbuilder.AppendLine();
+        }
+        //检查一个类型是否所有依赖类型均已导出
         private bool TypeReady(string type)
         {
             var td = infos[type];
@@ -247,15 +313,15 @@ namespace recallunity
                 bool br = TestTypeReady(needtypecoll.ToArray());
                 return br;
             }
-            else if(td.type== TypeInfo.Typetype.type_enum)
+            else if (td.type == TypeInfo.Typetype.type_enum)
             {
 
             }
-            else if(td.type== TypeInfo.Typetype.type_delegate)
+            else if (td.type == TypeInfo.Typetype.type_delegate)
             {
-                foreach(var md in td.def.Methods)
+                foreach (var md in td.def.Methods)
                 {
-                    if(md.Name=="Invoke")
+                    if (md.Name == "Invoke")
                     {
                         List<string> needtypecoll = new List<string>();
 
