@@ -5,6 +5,13 @@ using System.Windows.Forms;
 
 namespace recallunity
 {
+    class ConsoleLogger : ILogger
+    {
+        public void Log(string log)
+        {
+            Console.WriteLine(log);
+        }
+    }
     static class Program
     {
         /// <summary>
@@ -13,9 +20,11 @@ namespace recallunity
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            ILParser parser = new ILParser(new ConsoleLogger());
+            parser.LoadDll("UnityEngine.dll");
+            parser.ExportProj(new NameSpaceFilter("UnityEngine", "WebUnity"), "../csproj", "../tsproj");
+            Console.WriteLine("Press Enter to quit.");
+            Console.ReadLine();
         }
     }
 }
