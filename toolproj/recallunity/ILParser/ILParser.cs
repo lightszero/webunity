@@ -26,8 +26,9 @@ namespace recallunity
             module = Mono.Cecil.ModuleDefinition.ReadModule(filename);
             foreach (TypeDefinition t in module.GetTypes())
             {
+
                 if (t.IsPublic == false) continue;
-                //if (t.Namespace.Contains("UnityEngine") == false) continue;
+                if (t.Name.Contains("`")) continue;
                 TypeInfo _t = new TypeInfo(t);
                 infos[t.FullName] = _t;
 
@@ -42,6 +43,8 @@ namespace recallunity
             {
                 foreach (var nt in t.NestedTypes)
                 {
+                    if (nt.Name.Contains("`")) continue;
+
                     TypeInfo _nt = new TypeInfo(nt);
                     infos[nt.FullName] = _nt;
 
@@ -141,7 +144,8 @@ namespace recallunity
                     }
                     else if (t.Last() == ']')
                     {
-                        bool br = TestTypeReady(t.Substring(0, t.Length - 2));
+                        int i = t.LastIndexOf('[');
+                        bool br = TestTypeReady(t.Substring(0, i));
                         if (!br) return false;
                         else continue;
                     }
@@ -155,6 +159,7 @@ namespace recallunity
                         || t == "System.Runtime.Serialization.StreamingContext"
                         || t == "System.Runtime.Serialization.ISurrogateSelector"
                         || t == "System.Reflection.Assembly"
+                        || t == "System.Reflection.MethodInfo"
                         || t == "System.Text.Encoding"
                         || t == "System.IntPtr"
                         || t == "System.Type"
@@ -164,6 +169,7 @@ namespace recallunity
                         || t == "System.Exception"
                         || t == "System.Collections.IEnumerator"
                         || t == "System.Collections.Hashtable"
+                        || t == "System.Collections.IDictionary"
                         )
 
                     {
@@ -201,10 +207,66 @@ namespace recallunity
             var def = infos[type].def;
 
             if (infos[type].type == TypeInfo.Typetype.type_enum)
-                Export_Enum(def,csfilepath, tsfilepath);
+            {
+                Export_Enum(def, csfilepath, tsfilepath);
+                buildinfo[type].hasBuild = true;
+            }
+            else if (infos[type].type == TypeInfo.Typetype.type_interface || infos[type].type == TypeInfo.Typetype.type_struct || infos[type].type == TypeInfo.Typetype.type_class)
+            {
+                Export_Def(def, infos[type].type, csfilepath, tsfilepath);
+                buildinfo[type].hasBuild = true;
+            }
 
         }
+        string getFullName(TypeReference def)
+        {
+            var t = def as TypeDefinition;
+            if (t != null && (t.BaseType.Name == "Delegate" || t.BaseType.Name == "MulticastDelegate"))
+            {
+                foreach (var md in t.Methods)
+                {
+                    if (md.Name == "Invoke")
+                    {
+                        if (md.Parameters.Count == 0)
+                        {
+                            return "System.Action";
+                        }
+                        else
+                        {
+                            string outaction = "System.Action<";
+                            foreach (var mdp in md.Parameters)
+                            {
+                                string pname = getFullName(mdp.ParameterType);
+                                if (outaction.Last() == '<')
+                                    outaction += pname;
+                                else
+                                    outaction += "," + pname;
+                            }
+                            return outaction + ">";
 
+                        }
+                    }
+                }
+                System.Diagnostics.Debugger.Break();
+            }
+            string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
+            string name = def.Name;
+            if (def.Namespace == "" && def.DeclaringType != null)
+            {
+                _namespace = def.DeclaringType.Namespace.Replace(filter.srcname, filter.destname);
+                name = def.DeclaringType.Name + "_" + def.Name;
+
+            }
+            string outname = _namespace + "." + name;
+            if (outname == "System.Single modreq(System.Runtime.CompilerServices.IsVolatile)")
+            {
+                outname = "float";
+            }
+
+
+
+            return outname;
+        }
         private void Export_Enum(TypeDefinition def, string csfilepath, string tsfilepath)
         {
             string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
@@ -275,6 +337,75 @@ namespace recallunity
             }
 
         }
+
+        private void Export_Def(TypeDefinition def, TypeInfo.Typetype type, string csfilepath, string tsfilepath)
+        {
+            string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
+            string name = def.Name;
+            if (def.Namespace == "")
+            {
+                _namespace = def.DeclaringType.Namespace;
+                name = def.DeclaringType.Name + "_" + def.Name;
+            }
+            csLoader loader = new csLoader(csfilepath);
+            //交互导出
+            if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
+            {
+                var t = loader._namespace.types[name];
+                if (t.attr.ContainsKey("NotExport"))
+                {
+                    return;
+                }
+            }
+
+            string outtype = "";
+            if (type == TypeInfo.Typetype.type_interface)
+                outtype = "interface";
+            else if (type == TypeInfo.Typetype.type_struct || type == TypeInfo.Typetype.type_class)
+                outtype = "class";
+            {//outcs
+
+
+                NewStr();
+                AppendLine("namespace " + _namespace);
+                AppendLine("{");
+                {
+                    AddSpace();
+                    AppendLine("public " + outtype + " " + name);
+                    AppendLine("{");
+                    {
+                        AddSpace();
+                        for (int i = 0; i < def.Fields.Count; i++)
+                        {
+                            var f = def.Fields[i];
+                            if (f.IsPublic == false) continue;
+                            string type_name = getFullName(f.FieldType) + " " + f.Name;
+                            if (type_name.Contains("System.Single modreq(System.Runtime.CompilerServices.IsVolatile)"))
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                            if (f.HasConstant)
+                            {
+                                type_name += " = " + f.Constant;
+                            }
+                            else
+                            {
+                                AppendLine(type_name + ";");
+                            }
+                        }
+                        DecSpace();
+                    }
+                    AppendLine("}");
+                    DecSpace();
+                }
+                AppendLine("}");
+                var outcs = GetStr();
+                System.IO.File.Delete(csfilepath);
+                System.IO.File.WriteAllText(csfilepath, outcs);
+            }
+        }
+
+
 
         static StringBuilder sbuilder;
         static void NewStr()
@@ -381,66 +512,6 @@ namespace recallunity
                 }
             }
             return false;
-        }
-    }
-    public class BuildInfo
-    {
-
-        public bool hasBuild;
-    }
-    public class NameSpaceFilter
-    {
-        public NameSpaceFilter()
-        {
-
-        }
-        public NameSpaceFilter(string src, string dest)
-        {
-            this.srcname = src;
-            this.destname = dest;
-        }
-        public string srcname;
-        public string destname;
-    }
-    public class TypeInfo
-    {
-        public enum Typetype
-        {
-            type_unknown,
-            type_interface,
-            type_class,
-            type_struct,
-            type_delegate,
-            type_enum,
-        }
-        public TypeInfo(TypeDefinition def)
-        {
-            this.def = def;
-            var t = def;
-            type = Typetype.type_unknown;
-            if (t.IsInterface)
-                type = Typetype.type_interface;
-            if (t.IsClass)
-            {
-                type = Typetype.type_class;
-                if (t.BaseType.Name == "Delegate" || t.BaseType.Name == "MulticastDelegate")
-                {
-                    type = Typetype.type_delegate;
-                }
-            }
-            if (t.IsValueType)
-                type = Typetype.type_struct;
-            if (t.IsEnum)
-                type = Typetype.type_enum;
-        }
-        public TypeDefinition def;
-        public Typetype type;
-        public override string ToString()
-        {
-            string basetype = "<nobase>";
-            if (def.BaseType != null)
-                basetype = def.BaseType.Name;
-            return type + "||" + def.FullName + ":" + basetype;
         }
     }
 

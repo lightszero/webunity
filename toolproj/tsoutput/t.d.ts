@@ -32,6 +32,7 @@ declare module WebUnity {
         AlwaysAnimate = 0,
         CullUpdateTransforms = 1,
         CullCompletely = 2,
+        BasedOnRenderers = 1,
     }
 }
 declare module WebUnity {
@@ -272,7 +273,6 @@ declare module WebUnity {
         Append = 2,
         Counter = 4,
         DrawIndirect = 256,
-        GPUMemory = 512,
     }
 }
 declare module WebUnity {
@@ -1044,6 +1044,9 @@ declare module WebUnity {
         NonDirectional = 0,
         CombinedDirectional = 1,
         SeparateDirectional = 2,
+        Single = 0,
+        Dual = 1,
+        Directional = 2,
     }
 }
 declare module WebUnity {
@@ -1949,6 +1952,7 @@ declare module WebUnity {
         MetroPlayerARM = 20,
         WSAPlayerARM = 20,
         WP8Player = 21,
+        BB10Player = 22,
         BlackBerryPlayer = 22,
         TizenPlayer = 23,
         PSP2 = 24,
@@ -2091,6 +2095,7 @@ declare module WebUnity {
         German = 15,
         Greek = 16,
         Hebrew = 17,
+        Hugarian = 18,
         Icelandic = 19,
         Indonesian = 20,
         Italian = 21,
@@ -2288,6 +2293,10 @@ declare module WebUnity {
         ASTC_RGBA_12x12 = 59,
         ETC_RGB4_3DS = 60,
         ETC_RGBA8_3DS = 61,
+        PVRTC_2BPP_RGB = -127,
+        PVRTC_2BPP_RGBA = -127,
+        PVRTC_4BPP_RGB = -127,
+        PVRTC_4BPP_RGBA = -127,
     }
 }
 declare module WebUnity {
@@ -2367,7 +2376,6 @@ declare module WebUnity.VR {
         Split = 2,
         Oculus = 3,
         Morpheus = 4,
-        PlayStationVR = 4,
     }
 }
 declare module WebUnity.VR {
