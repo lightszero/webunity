@@ -474,7 +474,7 @@ declare module WebUnity.Experimental.Director {
         Playing = 1,
     }
 }
-declare module UnityEngine.Experimental.Networking {
+declare module WebUnity.Experimental.Networking {
     enum UnityWebRequest_UnityWebRequestError {
         OK = 0,
         Unknown = 1,
@@ -506,7 +506,7 @@ declare module UnityEngine.Experimental.Networking {
         SSLShutdownFailed = 27,
     }
 }
-declare module UnityEngine.Experimental.Networking {
+declare module WebUnity.Experimental.Networking {
     enum UnityWebRequest_UnityWebRequestMethod {
         Get = 0,
         Post = 1,
@@ -580,7 +580,7 @@ declare module WebUnityInternal {
         InputWorkspace = 7,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum GUILayoutOption_Type {
         fixedWidth = 0,
         fixedHeight = 1,
@@ -1510,13 +1510,13 @@ declare module WebUnity {
         PlayNow = 2,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum RectTransform_Axis {
         Horizontal = 0,
         Vertical = 1,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum RectTransform_Edge {
         Left = 0,
         Right = 1,
@@ -2131,7 +2131,7 @@ declare module WebUnity {
         all = 7,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum Terrain_MaterialType {
         BuiltInStandard = 0,
         BuiltInLegacyDiffuse = 1,
@@ -2175,7 +2175,7 @@ declare module WebUnity {
         Clip = 1,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum TextEditor_CharacterType {
         LetterLike = 0,
         Symbol = 1,
@@ -2183,13 +2183,13 @@ declare module UnityEngine {
         WhiteSpace = 3,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum TextEditor_DblClickSnapping {
         WORDS = 0,
         PARAGRAPHS = 1,
     }
 }
-declare module UnityEngine {
+declare module WebUnity {
     enum TextEditor_TextEditOp {
         MoveLeft = 0,
         MoveRight = 1,

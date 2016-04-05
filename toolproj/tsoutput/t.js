@@ -588,8 +588,8 @@ var WebUnity;
         })(Director = Experimental.Director || (Experimental.Director = {}));
     })(Experimental = WebUnity.Experimental || (WebUnity.Experimental = {}));
 })(WebUnity || (WebUnity = {}));
-var UnityEngine;
-(function (UnityEngine) {
+var WebUnity;
+(function (WebUnity) {
     var Experimental;
     (function (Experimental) {
         var Networking;
@@ -626,10 +626,10 @@ var UnityEngine;
             })(Networking.UnityWebRequest_UnityWebRequestError || (Networking.UnityWebRequest_UnityWebRequestError = {}));
             var UnityWebRequest_UnityWebRequestError = Networking.UnityWebRequest_UnityWebRequestError;
         })(Networking = Experimental.Networking || (Experimental.Networking = {}));
-    })(Experimental = UnityEngine.Experimental || (UnityEngine.Experimental = {}));
-})(UnityEngine || (UnityEngine = {}));
-var UnityEngine;
-(function (UnityEngine) {
+    })(Experimental = WebUnity.Experimental || (WebUnity.Experimental = {}));
+})(WebUnity || (WebUnity = {}));
+var WebUnity;
+(function (WebUnity) {
     var Experimental;
     (function (Experimental) {
         var Networking;
@@ -643,8 +643,8 @@ var UnityEngine;
             })(Networking.UnityWebRequest_UnityWebRequestMethod || (Networking.UnityWebRequest_UnityWebRequestMethod = {}));
             var UnityWebRequest_UnityWebRequestMethod = Networking.UnityWebRequest_UnityWebRequestMethod;
         })(Networking = Experimental.Networking || (Experimental.Networking = {}));
-    })(Experimental = UnityEngine.Experimental || (UnityEngine.Experimental = {}));
-})(UnityEngine || (UnityEngine = {}));
+    })(Experimental = WebUnity.Experimental || (WebUnity.Experimental = {}));
+})(WebUnity || (WebUnity = {}));
 var WebUnity;
 (function (WebUnity) {
     (function (FFTWindow) {
@@ -726,8 +726,8 @@ var WebUnityInternal;
     })(WebUnityInternal.GITextureType || (WebUnityInternal.GITextureType = {}));
     var GITextureType = WebUnityInternal.GITextureType;
 })(WebUnityInternal || (WebUnityInternal = {}));
-var UnityEngine;
-(function (UnityEngine) {
+var WebUnity;
+(function (WebUnity) {
     (function (GUILayoutOption_Type) {
         GUILayoutOption_Type[GUILayoutOption_Type["fixedWidth"] = 0] = "fixedWidth";
         GUILayoutOption_Type[GUILayoutOption_Type["fixedHeight"] = 1] = "fixedHeight";
@@ -743,9 +743,9 @@ var UnityEngine;
         GUILayoutOption_Type[GUILayoutOption_Type["alignJustify"] = 11] = "alignJustify";
         GUILayoutOption_Type[GUILayoutOption_Type["equalSize"] = 12] = "equalSize";
         GUILayoutOption_Type[GUILayoutOption_Type["spacing"] = 13] = "spacing";
-    })(UnityEngine.GUILayoutOption_Type || (UnityEngine.GUILayoutOption_Type = {}));
-    var GUILayoutOption_Type = UnityEngine.GUILayoutOption_Type;
-})(UnityEngine || (UnityEngine = {}));
+    })(WebUnity.GUILayoutOption_Type || (WebUnity.GUILayoutOption_Type = {}));
+    var GUILayoutOption_Type = WebUnity.GUILayoutOption_Type;
+})(WebUnity || (WebUnity = {}));
 var WebUnity;
 (function (WebUnity) {
     (function (HideFlags) {
@@ -1812,24 +1812,24 @@ var WebUnity;
     })(WebUnity.QueueMode || (WebUnity.QueueMode = {}));
     var QueueMode = WebUnity.QueueMode;
 })(WebUnity || (WebUnity = {}));
-var UnityEngine;
-(function (UnityEngine) {
+var WebUnity;
+(function (WebUnity) {
     (function (RectTransform_Axis) {
         RectTransform_Axis[RectTransform_Axis["Horizontal"] = 0] = "Horizontal";
         RectTransform_Axis[RectTransform_Axis["Vertical"] = 1] = "Vertical";
-    })(UnityEngine.RectTransform_Axis || (UnityEngine.RectTransform_Axis = {}));
-    var RectTransform_Axis = UnityEngine.RectTransform_Axis;
-})(UnityEngine || (UnityEngine = {}));
-var UnityEngine;
-(function (UnityEngine) {
+    })(WebUnity.RectTransform_Axis || (WebUnity.RectTransform_Axis = {}));
+    var RectTransform_Axis = WebUnity.RectTransform_Axis;
+})(WebUnity || (WebUnity = {}));
+var WebUnity;
+(function (WebUnity) {
     (function (RectTransform_Edge) {
         RectTransform_Edge[RectTransform_Edge["Left"] = 0] = "Left";
         RectTransform_Edge[RectTransform_Edge["Right"] = 1] = "Right";
         RectTransform_Edge[RectTransform_Edge["Top"] = 2] = "Top";
         RectTransform_Edge[RectTransform_Edge["Bottom"] = 3] = "Bottom";
-    })(UnityEngine.RectTransform_Edge || (UnityEngine.RectTransform_Edge = {}));
-    var RectTransform_Edge = UnityEngine.RectTransform_Edge;
-})(UnityEngine || (UnityEngine = {}));
+    })(WebUnity.RectTransform_Edge || (WebUnity.RectTransform_Edge = {}));
+    var RectTransform_Edge = WebUnity.RectTransform_Edge;
+})(WebUnity || (WebUnity = {}));
 var WebUnity;
 (function (WebUnity) {
     var Rendering;
@@ -2644,16 +2644,16 @@ var WebUnity;
     })(WebUnity.TerrainRenderFlags || (WebUnity.TerrainRenderFlags = {}));
     var TerrainRenderFlags = WebUnity.TerrainRenderFlags;
 })(WebUnity || (WebUnity = {}));
-var UnityEngine;
-(function (UnityEngine) {
+var WebUnity;
+(function (WebUnity) {
     (function (Terrain_MaterialType) {
         Terrain_MaterialType[Terrain_MaterialType["BuiltInStandard"] = 0] = "BuiltInStandard";
         Terrain_MaterialType[Terrain_MaterialType["BuiltInLegacyDiffuse"] = 1] = "BuiltInLegacyDiffuse";
         Terrain_MaterialType[Terrain_MaterialType["BuiltInLegacySpecular"] = 2] = "BuiltInLegacySpecular";
         Terrain_MaterialType[Terrain_MaterialType["Custom"] = 3] = "Custom";
-    })(UnityEngine.Terrain_MaterialType || (UnityEngine.Terrain_MaterialType = {}));
-    var Terrain_MaterialType = UnityEngine.Terrain_MaterialType;
-})(UnityEngine || (UnityEngine = {}));
+    })(WebUnity.Terrain_MaterialType || (WebUnity.Terrain_MaterialType = {}));
+    var Terrain_MaterialType = WebUnity.Terrain_MaterialType;
+})(WebUnity || (WebUnity = {}));
 var WebUnity;
 (function (WebUnity) {
     (function (TexGenMode) {
@@ -2698,26 +2698,26 @@ var WebUnity;
     })(WebUnity.TextClipping || (WebUnity.TextClipping = {}));
     var TextClipping = WebUnity.TextClipping;
 })(WebUnity || (WebUnity = {}));
-var UnityEngine;
-(function (UnityEngine) {
+var WebUnity;
+(function (WebUnity) {
     (function (TextEditor_CharacterType) {
         TextEditor_CharacterType[TextEditor_CharacterType["LetterLike"] = 0] = "LetterLike";
         TextEditor_CharacterType[TextEditor_CharacterType["Symbol"] = 1] = "Symbol";
         TextEditor_CharacterType[TextEditor_CharacterType["Symbol2"] = 2] = "Symbol2";
         TextEditor_CharacterType[TextEditor_CharacterType["WhiteSpace"] = 3] = "WhiteSpace";
-    })(UnityEngine.TextEditor_CharacterType || (UnityEngine.TextEditor_CharacterType = {}));
-    var TextEditor_CharacterType = UnityEngine.TextEditor_CharacterType;
-})(UnityEngine || (UnityEngine = {}));
-var UnityEngine;
-(function (UnityEngine) {
+    })(WebUnity.TextEditor_CharacterType || (WebUnity.TextEditor_CharacterType = {}));
+    var TextEditor_CharacterType = WebUnity.TextEditor_CharacterType;
+})(WebUnity || (WebUnity = {}));
+var WebUnity;
+(function (WebUnity) {
     (function (TextEditor_DblClickSnapping) {
         TextEditor_DblClickSnapping[TextEditor_DblClickSnapping["WORDS"] = 0] = "WORDS";
         TextEditor_DblClickSnapping[TextEditor_DblClickSnapping["PARAGRAPHS"] = 1] = "PARAGRAPHS";
-    })(UnityEngine.TextEditor_DblClickSnapping || (UnityEngine.TextEditor_DblClickSnapping = {}));
-    var TextEditor_DblClickSnapping = UnityEngine.TextEditor_DblClickSnapping;
-})(UnityEngine || (UnityEngine = {}));
-var UnityEngine;
-(function (UnityEngine) {
+    })(WebUnity.TextEditor_DblClickSnapping || (WebUnity.TextEditor_DblClickSnapping = {}));
+    var TextEditor_DblClickSnapping = WebUnity.TextEditor_DblClickSnapping;
+})(WebUnity || (WebUnity = {}));
+var WebUnity;
+(function (WebUnity) {
     (function (TextEditor_TextEditOp) {
         TextEditor_TextEditOp[TextEditor_TextEditOp["MoveLeft"] = 0] = "MoveLeft";
         TextEditor_TextEditOp[TextEditor_TextEditOp["MoveRight"] = 1] = "MoveRight";
@@ -2769,9 +2769,9 @@ var UnityEngine;
         TextEditor_TextEditOp[TextEditor_TextEditOp["ScrollEnd"] = 47] = "ScrollEnd";
         TextEditor_TextEditOp[TextEditor_TextEditOp["ScrollPageUp"] = 48] = "ScrollPageUp";
         TextEditor_TextEditOp[TextEditor_TextEditOp["ScrollPageDown"] = 49] = "ScrollPageDown";
-    })(UnityEngine.TextEditor_TextEditOp || (UnityEngine.TextEditor_TextEditOp = {}));
-    var TextEditor_TextEditOp = UnityEngine.TextEditor_TextEditOp;
-})(UnityEngine || (UnityEngine = {}));
+    })(WebUnity.TextEditor_TextEditOp || (WebUnity.TextEditor_TextEditOp = {}));
+    var TextEditor_TextEditOp = WebUnity.TextEditor_TextEditOp;
+})(WebUnity || (WebUnity = {}));
 var WebUnity;
 (function (WebUnity) {
     (function (TextureFormat) {

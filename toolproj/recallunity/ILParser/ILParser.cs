@@ -220,8 +220,9 @@ namespace recallunity
         }
         string getFullName(TypeReference def)
         {
+
             var t = def as TypeDefinition;
-            if (t != null && (t.BaseType.Name == "Delegate" || t.BaseType.Name == "MulticastDelegate"))
+            if (t != null && t.BaseType != null && (t.BaseType.Name == "Delegate" || t.BaseType.Name == "MulticastDelegate"))
             {
                 foreach (var md in t.Methods)
                 {
@@ -249,6 +250,23 @@ namespace recallunity
                 }
                 System.Diagnostics.Debugger.Break();
             }
+            else if (def.IsGenericInstance)
+            {
+                GenericInstanceType gt = def as GenericInstanceType;
+                if (def.Name == "Dictionary`2")
+                {
+                    string t0 = getFullName(gt.GenericArguments[0]);
+                    string t1 = getFullName(gt.GenericArguments[1]);
+                    return "System.Collections.Generic.Dictionary<" + t0 + "," + t1 + ">";
+
+                }
+                if (def.Name == "List`1" || def.Name == "IList`1")
+                {
+                    string t0 = getFullName(gt.GenericArguments[0]);
+                    return "System.Collections.Generic.List<" + t0 + ">";
+
+                }
+            }
             string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
             string name = def.Name;
             if (def.Namespace == "" && def.DeclaringType != null)
@@ -257,6 +275,8 @@ namespace recallunity
                 name = def.DeclaringType.Name + "_" + def.Name;
 
             }
+            if (_namespace == "")
+                _namespace = filter.destname;
             string outname = _namespace + "." + name;
             if (outname == "System.Single modreq(System.Runtime.CompilerServices.IsVolatile)")
             {
@@ -269,13 +289,16 @@ namespace recallunity
         }
         private void Export_Enum(TypeDefinition def, string csfilepath, string tsfilepath)
         {
+
             string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
             string name = def.Name;
             if (def.Namespace == "")
             {
-                _namespace = def.DeclaringType.Namespace;
+                _namespace = def.DeclaringType.Namespace.Replace(filter.srcname, filter.destname);
                 name = def.DeclaringType.Name + "_" + def.Name;
             }
+            if (_namespace == "")
+                _namespace = filter.destname;
             csLoader loader = new csLoader(csfilepath);
             //交互导出
             if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
@@ -340,13 +363,16 @@ namespace recallunity
 
         private void Export_Def(TypeDefinition def, TypeInfo.Typetype type, string csfilepath, string tsfilepath)
         {
+            List<string> exportname = new List<string>();
             string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
             string name = def.Name;
             if (def.Namespace == "")
             {
-                _namespace = def.DeclaringType.Namespace;
+                _namespace = def.DeclaringType.Namespace.Replace(filter.srcname, filter.destname);
                 name = def.DeclaringType.Name + "_" + def.Name;
             }
+            if (_namespace == "")
+                _namespace = filter.destname;
             csLoader loader = new csLoader(csfilepath);
             //交互导出
             if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
@@ -375,23 +401,69 @@ namespace recallunity
                     AppendLine("{");
                     {
                         AddSpace();
+                        //AddField
                         for (int i = 0; i < def.Fields.Count; i++)
                         {
                             var f = def.Fields[i];
+
                             if (f.IsPublic == false) continue;
+                            if (exportname.Contains(f.Name)) continue;
+                            exportname.Add(f.Name);
                             string type_name = getFullName(f.FieldType) + " " + f.Name;
-                            if (type_name.Contains("System.Single modreq(System.Runtime.CompilerServices.IsVolatile)"))
-                            {
-                                System.Diagnostics.Debugger.Break();
-                            }
+
                             if (f.HasConstant)
                             {
                                 type_name += " = " + f.Constant;
                             }
                             else
                             {
-                                AppendLine(type_name + ";");
+                                AppendLine("public " + type_name + ";");
                             }
+                        }
+                        //AddProp
+                        for (int i = 0; i < def.Properties.Count; i++)
+                        {
+                            PropertyDefinition p = def.Properties[i];
+                            if (p.GetMethod.IsPublic == false) continue;
+                            if (exportname.Contains(p.Name)) continue;
+                            exportname.Add(p.Name);
+                            string type_name = getFullName(p.GetMethod.ReturnType) + " " + p.Name;
+                            if ((type == TypeInfo.Typetype.type_interface))
+                            {
+                                AppendLine(type_name);
+                            }
+                            else
+                            {
+                                AppendLine("public " + type_name);
+                            }
+                            AppendLine("{");
+                            {
+                                AddSpace();
+
+                                AppendLine("get;");
+                                //{
+                                //    AppendLine("{");
+                                //    {
+                                //        AddSpace();
+
+                                //        DecSpace();
+                                //    }
+                                //    AppendLine("}");
+                                //}
+                                if ((type == TypeInfo.Typetype.type_interface))
+                                {
+
+                                }
+                                else
+                                {
+                                    if (p.SetMethod != null && p.SetMethod.IsPublic)
+                                        AppendLine("set;");
+                                    else
+                                        AppendLine("private set;");
+                                }
+                                DecSpace();
+                            }
+                            AppendLine("}");
                         }
                         DecSpace();
                     }

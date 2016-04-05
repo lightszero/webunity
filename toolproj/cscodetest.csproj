@@ -45,8 +45,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bin\csproj\AccelerationEvent.cs" />
+    <Compile Include="bin\csproj\ADBannerView.cs" />
+    <Compile Include="bin\csproj\ADBannerView_Layout.cs" />
+    <Compile Include="bin\csproj\ADBannerView_Type.cs" />
     <Compile Include="bin\csproj\AddComponentMenu.cs" />
+    <Compile Include="bin\csproj\ADInterstitialAd.cs" />
     <Compile Include="bin\csproj\AnchoredJoint2D.cs" />
+    <Compile Include="bin\csproj\AndroidActivityIndicatorStyle.cs" />
+    <Compile Include="bin\csproj\AndroidInput.cs" />
     <Compile Include="bin\csproj\AndroidJavaClass.cs" />
     <Compile Include="bin\csproj\AndroidJavaException.cs" />
     <Compile Include="bin\csproj\AndroidJavaObject.cs" />
@@ -60,6 +66,7 @@
     <Compile Include="bin\csproj\AnimationCullingType.cs" />
     <Compile Include="bin\csproj\AnimationCurve.cs" />
     <Compile Include="bin\csproj\AnimationEvent.cs" />
+    <Compile Include="bin\csproj\AnimationInfo.cs" />
     <Compile Include="bin\csproj\AnimationPlayMode.cs" />
     <Compile Include="bin\csproj\AnimationState.cs" />
     <Compile Include="bin\csproj\Animation_Enumerator.cs" />
@@ -132,6 +139,8 @@
     <Compile Include="bin\csproj\BuoyancyEffector2D.cs" />
     <Compile Include="bin\csproj\CacheIndex.cs" />
     <Compile Include="bin\csproj\Caching.cs" />
+    <Compile Include="bin\csproj\CalendarIdentifier.cs" />
+    <Compile Include="bin\csproj\CalendarUnit.cs" />
     <Compile Include="bin\csproj\Camera.cs" />
     <Compile Include="bin\csproj\CameraClearFlags.cs" />
     <Compile Include="bin\csproj\CameraType.cs" />
@@ -146,6 +155,9 @@
     <Compile Include="bin\csproj\Cloth.cs" />
     <Compile Include="bin\csproj\ClothSkinningCoefficient.cs" />
     <Compile Include="bin\csproj\ClothSphereColliderPair.cs" />
+    <Compile Include="bin\csproj\ClusterInput.cs" />
+    <Compile Include="bin\csproj\ClusterInputType.cs" />
+    <Compile Include="bin\csproj\ClusterNetwork.cs" />
     <Compile Include="bin\csproj\Collider.cs" />
     <Compile Include="bin\csproj\Collider2D.cs" />
     <Compile Include="bin\csproj\Collision.cs" />
@@ -249,6 +261,8 @@
     <Compile Include="bin\csproj\ForceMode.cs" />
     <Compile Include="bin\csproj\ForceMode2D.cs" />
     <Compile Include="bin\csproj\FrictionJoint2D.cs" />
+    <Compile Include="bin\csproj\FullScreenMovieControlMode.cs" />
+    <Compile Include="bin\csproj\FullScreenMovieScalingMode.cs" />
     <Compile Include="bin\csproj\GameObject.cs" />
     <Compile Include="bin\csproj\GenericStack.cs" />
     <Compile Include="bin\csproj\GeometryUtility.cs" />
@@ -288,6 +302,7 @@
     <Compile Include="bin\csproj\GUI_ScrollViewScope.cs" />
     <Compile Include="bin\csproj\GUI_ScrollViewState.cs" />
     <Compile Include="bin\csproj\Gyroscope.cs" />
+    <Compile Include="bin\csproj\Handheld.cs" />
     <Compile Include="bin\csproj\Hash128.cs" />
     <Compile Include="bin\csproj\HeaderAttribute.cs" />
     <Compile Include="bin\csproj\HelpURLAttribute.cs" />
@@ -314,6 +329,37 @@
     <Compile Include="bin\csproj\Input.cs" />
     <Compile Include="bin\csproj\Internal.DefaultValueAttribute.cs" />
     <Compile Include="bin\csproj\Internal.ExcludeFromDocsAttribute.cs" />
+    <Compile Include="bin\csproj\iOS.ActivityIndicatorStyle.cs" />
+    <Compile Include="bin\csproj\iOS.ADBannerView.cs" />
+    <Compile Include="bin\csproj\iOS.ADBannerView_Layout.cs" />
+    <Compile Include="bin\csproj\iOS.ADBannerView_Type.cs" />
+    <Compile Include="bin\csproj\iOS.ADInterstitialAd.cs" />
+    <Compile Include="bin\csproj\iOS.CalendarIdentifier.cs" />
+    <Compile Include="bin\csproj\iOS.CalendarUnit.cs" />
+    <Compile Include="bin\csproj\iOS.Device.cs" />
+    <Compile Include="bin\csproj\iOS.DeviceGeneration.cs" />
+    <Compile Include="bin\csproj\iOS.LocalNotification.cs" />
+    <Compile Include="bin\csproj\iOS.NotificationServices.cs" />
+    <Compile Include="bin\csproj\iOS.NotificationType.cs" />
+    <Compile Include="bin\csproj\iOS.OnDemandResources.cs" />
+    <Compile Include="bin\csproj\iOS.OnDemandResourcesRequest.cs" />
+    <Compile Include="bin\csproj\iOS.RemoteNotification.cs" />
+    <Compile Include="bin\csproj\iOSActivityIndicatorStyle.cs" />
+    <Compile Include="bin\csproj\iPhone.cs" />
+    <Compile Include="bin\csproj\iPhoneAccelerationEvent.cs" />
+    <Compile Include="bin\csproj\iPhoneGeneration.cs" />
+    <Compile Include="bin\csproj\iPhoneInput.cs" />
+    <Compile Include="bin\csproj\iPhoneKeyboard.cs" />
+    <Compile Include="bin\csproj\iPhoneKeyboardType.cs" />
+    <Compile Include="bin\csproj\iPhoneMovieControlMode.cs" />
+    <Compile Include="bin\csproj\iPhoneMovieScalingMode.cs" />
+    <Compile Include="bin\csproj\iPhoneNetworkReachability.cs" />
+    <Compile Include="bin\csproj\iPhoneOrientation.cs" />
+    <Compile Include="bin\csproj\iPhoneScreenOrientation.cs" />
+    <Compile Include="bin\csproj\iPhoneSettings.cs" />
+    <Compile Include="bin\csproj\iPhoneTouch.cs" />
+    <Compile Include="bin\csproj\iPhoneTouchPhase.cs" />
+    <Compile Include="bin\csproj\iPhoneUtils.cs" />
     <Compile Include="bin\csproj\ISerializationCallbackReceiver.cs" />
     <Compile Include="bin\csproj\Joint.cs" />
     <Compile Include="bin\csproj\Joint2D.cs" />
@@ -346,6 +392,7 @@
     <Compile Include="bin\csproj\LightShadows.cs" />
     <Compile Include="bin\csproj\LightType.cs" />
     <Compile Include="bin\csproj\LineRenderer.cs" />
+    <Compile Include="bin\csproj\LocalNotification.cs" />
     <Compile Include="bin\csproj\LocationInfo.cs" />
     <Compile Include="bin\csproj\LocationService.cs" />
     <Compile Include="bin\csproj\LocationServiceStatus.cs" />
@@ -434,6 +481,7 @@
     <Compile Include="bin\csproj\NetworkStateSynchronization.cs" />
     <Compile Include="bin\csproj\NetworkView.cs" />
     <Compile Include="bin\csproj\NetworkViewID.cs" />
+    <Compile Include="bin\csproj\NotificationServices.cs" />
     <Compile Include="bin\csproj\NPOTSupport.cs" />
     <Compile Include="bin\csproj\Object.cs" />
     <Compile Include="bin\csproj\ObstacleAvoidanceType.cs" />
@@ -467,6 +515,7 @@
     <Compile Include="bin\csproj\ParticleSystemSimulationSpace.cs" />
     <Compile Include="bin\csproj\ParticleSystemSortMode.cs" />
     <Compile Include="bin\csproj\ParticleSystem_Burst.cs" />
+    <Compile Include="bin\csproj\ParticleSystem_CollisionEvent.cs" />
     <Compile Include="bin\csproj\ParticleSystem_CollisionModule.cs" />
     <Compile Include="bin\csproj\ParticleSystem_ColorBySpeedModule.cs" />
     <Compile Include="bin\csproj\ParticleSystem_ColorOverLifetimeModule.cs" />
@@ -532,6 +581,8 @@
     <Compile Include="bin\csproj\RectTransform_Edge.cs" />
     <Compile Include="bin\csproj\ReflectionProbe.cs" />
     <Compile Include="bin\csproj\RelativeJoint2D.cs" />
+    <Compile Include="bin\csproj\RemoteNotification.cs" />
+    <Compile Include="bin\csproj\RemoteNotificationType.cs" />
     <Compile Include="bin\csproj\RenderBuffer.cs" />
     <Compile Include="bin\csproj\Renderer.cs" />
     <Compile Include="bin\csproj\Rendering.AmbientMode.cs" />
@@ -591,6 +642,12 @@
     <Compile Include="bin\csproj\RuntimeInitializeLoadType.cs" />
     <Compile Include="bin\csproj\RuntimeInitializeOnLoadMethodAttribute.cs" />
     <Compile Include="bin\csproj\RuntimePlatform.cs" />
+    <Compile Include="bin\csproj\SamsungTV.cs" />
+    <Compile Include="bin\csproj\SamsungTV_GamePadMode.cs" />
+    <Compile Include="bin\csproj\SamsungTV_GestureMode.cs" />
+    <Compile Include="bin\csproj\SamsungTV_OpenAPI.cs" />
+    <Compile Include="bin\csproj\SamsungTV_OpenAPI_OpenAPIServerType.cs" />
+    <Compile Include="bin\csproj\SamsungTV_TouchPadMode.cs" />
     <Compile Include="bin\csproj\ScaleMode.cs" />
     <Compile Include="bin\csproj\SceneManagement.LoadSceneMode.cs" />
     <Compile Include="bin\csproj\SceneManagement.Scene.cs" />
@@ -683,11 +740,13 @@
     <Compile Include="bin\csproj\Texture.cs" />
     <Compile Include="bin\csproj\Texture2D.cs" />
     <Compile Include="bin\csproj\Texture3D.cs" />
+    <Compile Include="bin\csproj\TextureCompressionQuality.cs" />
     <Compile Include="bin\csproj\TextureFormat.cs" />
     <Compile Include="bin\csproj\TextureWrapMode.cs" />
     <Compile Include="bin\csproj\ThreadPriority.cs" />
     <Compile Include="bin\csproj\ThreadSafeAttribute.cs" />
     <Compile Include="bin\csproj\Time.cs" />
+    <Compile Include="bin\csproj\Tizen.Window.cs" />
     <Compile Include="bin\csproj\TooltipAttribute.cs" />
     <Compile Include="bin\csproj\Touch.cs" />
     <Compile Include="bin\csproj\TouchPhase.cs" />
