@@ -35,6 +35,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory.CSharp, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ICSharpCode.NRefactory.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Cecil.20, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Mono.Cecil.20.dll</HintPath>
@@ -52,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="exportattr\exportattr.cs" />
+    <Compile Include="ILParser\csLoader.cs" />
     <Compile Include="ILParser\ILParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +84,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ICSharpCode.NRefactory.CSharp.dll" />
+    <Content Include="ICSharpCode.NRefactory.dll" />
     <Content Include="Mono.Cecil.20.dll" />
     <Content Include="UnityEngine.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

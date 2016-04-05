@@ -6,5 +6,13 @@ using System.Text;
 
 class NotExport : Attribute
 {
+    public NotExport()
+    {
+
+    }
+    public NotExport(params string[] paramss)
+    {
+
+    }
 }
 

@@ -203,13 +203,24 @@ namespace recallunity
 
             if (infos[type].type == TypeInfo.Typetype.type_enum)
             {
-                string _namespace = def.Namespace;
+                string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
                 string name = def.Name;
-                if(def.Namespace=="")
+                if (def.Namespace == "")
                 {
-                    _namespace=def.DeclaringType.Namespace;
+                    _namespace = def.DeclaringType.Namespace;
                     name = def.DeclaringType.Name + "_" + def.Name;
                 }
+                csLoader loader = new csLoader(csfilepath);
+                //交互导出
+                if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
+                {
+                    var t = loader._namespace.types[name];
+                    if (t.attr.ContainsKey("NotExport"))
+                    {
+                        return;
+                    }
+                }
+
                 AppendLine("namespace " + _namespace);
                 AppendLine("{");
                 {
