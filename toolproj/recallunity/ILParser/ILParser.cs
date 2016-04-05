@@ -266,6 +266,11 @@ namespace recallunity
                     return "System.Collections.Generic.List<" + t0 + ">";
 
                 }
+                if(def.Name=="Func`1")
+                {
+                    string t0 = getFullName(gt.GenericArguments[0]);
+                    return "System.Action<" + t0 + ">";
+                }
             }
             string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
             string name = def.Name;
@@ -282,9 +287,10 @@ namespace recallunity
             {
                 outname = "float";
             }
-
-
-
+            if (outname == "System.Single")
+            {
+                outname = "float";
+            }
             return outname;
         }
         private void Export_Enum(TypeDefinition def, string csfilepath, string tsfilepath)
@@ -464,6 +470,35 @@ namespace recallunity
                                 DecSpace();
                             }
                             AppendLine("}");
+                        }
+                        //add func
+                        int constcount = 0;
+                        for (int i = 0; i < def.Methods.Count; i++)
+                        {
+                            var m = def.Methods[i];
+                            if (m.IsPublic == false) continue;
+
+                            if (exportname.Contains(m.Name)) continue;
+                            exportname.Add(m.Name);
+                            if (m.IsConstructor)
+                            {
+                                constcount++;
+                                string call = "public " + name + "(";
+                                for (int j = 0; j < m.Parameters.Count; j++)
+                                {
+                                    if (j != 0) call += ",";
+                                    call += getFullName(m.Parameters[j].ParameterType) + " " + m.Parameters[j].Name;
+                                }
+                                AppendLine(call + ")");
+                                AppendLine("{");
+                                AppendLine("}");
+
+
+                            }
+                        }
+                        if (constcount > 1)
+                        {
+                            System.Diagnostics.Debugger.Break();
                         }
                         DecSpace();
                     }
