@@ -21,9 +21,16 @@ namespace recallunity
                 isFail = true;
                 return;
             }
-            ICSharpCode.NRefactory.CSharp.SyntaxTree tree = ICSharpCode.NRefactory.CSharp.SyntaxTree.Parse(System.IO.File.ReadAllText(file), file);
-            _namespace = new NameSpace();
-            _namespace.Parse(tree.Children.First() as ICSharpCode.NRefactory.CSharp.NamespaceDeclaration);
+            try
+            {
+                ICSharpCode.NRefactory.CSharp.SyntaxTree tree = ICSharpCode.NRefactory.CSharp.SyntaxTree.Parse(System.IO.File.ReadAllText(file), file);
+                _namespace = new NameSpace();
+                _namespace.Parse(tree.Children.First() as ICSharpCode.NRefactory.CSharp.NamespaceDeclaration);
+            }
+            catch
+            {
+                isFail = true;
+            }
         }
 
         public NameSpace _namespace

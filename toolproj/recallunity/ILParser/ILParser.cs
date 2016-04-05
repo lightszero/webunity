@@ -101,7 +101,7 @@ namespace recallunity
                         continue;
                     }
                     string csfilename = System.IO.Path.Combine(cspath, filename.Substring(si + 1) + ".cs");
-                    string tsfilename = System.IO.Path.Combine(cspath, filename.Substring(si + 1) + ".cs");
+                    string tsfilename = System.IO.Path.Combine(tspath, filename.Substring(si + 1) + ".ts");
                     if (i == 0)
                         TryExport(t.Key, csfilename, tsfilename);
                     else
@@ -198,29 +198,34 @@ namespace recallunity
         //核心方法
         void DoExport(string type, string csfilepath, string tsfilepath)
         {
-            NewStr();
             var def = infos[type].def;
 
             if (infos[type].type == TypeInfo.Typetype.type_enum)
-            {
-                string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
-                string name = def.Name;
-                if (def.Namespace == "")
-                {
-                    _namespace = def.DeclaringType.Namespace;
-                    name = def.DeclaringType.Name + "_" + def.Name;
-                }
-                csLoader loader = new csLoader(csfilepath);
-                //交互导出
-                if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
-                {
-                    var t = loader._namespace.types[name];
-                    if (t.attr.ContainsKey("NotExport"))
-                    {
-                        return;
-                    }
-                }
+                Export_Enum(def,csfilepath, tsfilepath);
 
+        }
+
+        private void Export_Enum(TypeDefinition def, string csfilepath, string tsfilepath)
+        {
+            string _namespace = def.Namespace.Replace(filter.srcname, filter.destname);
+            string name = def.Name;
+            if (def.Namespace == "")
+            {
+                _namespace = def.DeclaringType.Namespace;
+                name = def.DeclaringType.Name + "_" + def.Name;
+            }
+            csLoader loader = new csLoader(csfilepath);
+            //交互导出
+            if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
+            {
+                var t = loader._namespace.types[name];
+                if (t.attr.ContainsKey("NotExport"))
+                {
+                    return;
+                }
+            }
+            {//outcs
+                NewStr();
                 AppendLine("namespace " + _namespace);
                 AppendLine("{");
                 {
@@ -239,12 +244,38 @@ namespace recallunity
                     DecSpace();
                 }
                 AppendLine("}");
-                string outcs = GetStr();
+                var outcs = GetStr();
                 System.IO.File.Delete(csfilepath);
                 System.IO.File.WriteAllText(csfilepath, outcs);
             }
 
+            {//outts
+                NewStr();
+                AppendLine("module " + _namespace);
+                AppendLine("{");
+                {
+                    AddSpace();
+                    AppendLine("export enum " + name);
+                    AppendLine("{");
+                    {
+                        AddSpace();
+                        for (int i = 1; i < def.Fields.Count; i++)
+                        {
+                            AppendLine(def.Fields[i].Name + " = " + def.Fields[i].Constant + ",");
+                        }
+                        DecSpace();
+                    }
+                    AppendLine("}");
+                    DecSpace();
+                }
+                AppendLine("}");
+                var outts = GetStr();
+                System.IO.File.Delete(tsfilepath);
+                System.IO.File.WriteAllText(tsfilepath, outts);
+            }
+
         }
+
         static StringBuilder sbuilder;
         static void NewStr()
         {

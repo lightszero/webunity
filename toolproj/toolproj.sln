@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "recallunity", "recallunity\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cscodetest", "cscodetest.csproj", "{DC50D542-EBA4-49CD-B285-76C705F73067}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tscodetest", "tscodetest.csproj", "{B79821AD-C354-4E6B-B506-C6B6746DA504}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "codetest", "codetest", "{1D99B674-9434-449D-855E-15EAF2C3C906}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +25,16 @@ Global
 		{DC50D542-EBA4-49CD-B285-76C705F73067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC50D542-EBA4-49CD-B285-76C705F73067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC50D542-EBA4-49CD-B285-76C705F73067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B79821AD-C354-4E6B-B506-C6B6746DA504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79821AD-C354-4E6B-B506-C6B6746DA504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B79821AD-C354-4E6B-B506-C6B6746DA504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B79821AD-C354-4E6B-B506-C6B6746DA504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DC50D542-EBA4-49CD-B285-76C705F73067} = {1D99B674-9434-449D-855E-15EAF2C3C906}
+		{B79821AD-C354-4E6B-B506-C6B6746DA504} = {1D99B674-9434-449D-855E-15EAF2C3C906}
 	EndGlobalSection
 EndGlobal
