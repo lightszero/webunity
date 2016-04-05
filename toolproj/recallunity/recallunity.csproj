@@ -60,7 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="exportattr\exportattr.cs" />
+    <Compile Include="ILParser\code_parser.cs" />
     <Compile Include="ILParser\csLoader.cs" />
+    <Compile Include="ILParser\ILParser_Export.cs" />
     <Compile Include="ILParser\ILParser.cs" />
     <Compile Include="ILParser\Info.cs" />
     <Compile Include="Program.cs" />

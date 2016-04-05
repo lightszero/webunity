@@ -6,6 +6,7 @@ using System.Text;
 
 namespace recallunity
 {
+
     public class BuildInfo
     {
 
