@@ -24,8 +24,9 @@ namespace recallunity
             try
             {
                 ICSharpCode.NRefactory.CSharp.SyntaxTree tree = ICSharpCode.NRefactory.CSharp.SyntaxTree.Parse(System.IO.File.ReadAllText(file), file);
-                _namespace = new NameSpace();
-                NameSpace_Parse(_namespace, tree.Children.First() as ICSharpCode.NRefactory.CSharp.NamespaceDeclaration);
+                var nd = tree.Children.First() as ICSharpCode.NRefactory.CSharp.NamespaceDeclaration;
+                _namespace = new NameSpace(nd.Name);
+                NameSpace_Parse(_namespace,nd);
             }
             catch
             {
@@ -40,7 +41,7 @@ namespace recallunity
         }
 
 
-        static void NameSpace_Parse(NameSpace _this, ICSharpCode.NRefactory.CSharp.NamespaceDeclaration _namespace)
+         void NameSpace_Parse(NameSpace _this, ICSharpCode.NRefactory.CSharp.NamespaceDeclaration _namespace)
         {
 
             _this.name = _namespace.NamespaceName.ToString();
@@ -48,12 +49,14 @@ namespace recallunity
             {
                 if (m != null)
                 {
-                    _this.types[m.Name] = new Type();
+                    _this.types[m.Name] = new Type(m.Name);
+                    Type_Parse(_this.types[m.Name], m);
                 }
             }
         }
-        public void Type_Parse(Type _this, TypeDeclaration _type)
+         void Type_Parse(Type _this, TypeDeclaration _type)
         {
+            _this.name = _type.Name;
             if (_type.ClassType == ClassType.Class)
                 _this.type = TypeInfo.Typetype.type_class;
             else if (_type.ClassType == ClassType.Enum)

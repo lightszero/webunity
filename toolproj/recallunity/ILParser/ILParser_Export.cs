@@ -8,6 +8,7 @@ namespace recallunity
 {
     public partial class ILParser
     {
+        //enum 相对简单，直接手写之
         private void Export_Enum(TypeDefinition def, string csfilepath, string tsfilepath)
         {
 
@@ -31,51 +32,51 @@ namespace recallunity
                 }
             }
             {//outcs
-                NewStr();
-                AppendLine("namespace " + _namespace);
-                AppendLine("{");
+                StringTool.NewStr();
+                StringTool.AppendLine("namespace " + _namespace);
+                StringTool.AppendLine("{");
                 {
-                    AddSpace();
-                    AppendLine("public enum " + name);
-                    AppendLine("{");
+                    StringTool.AddSpace();
+                    StringTool.AppendLine("public enum " + name);
+                    StringTool.AppendLine("{");
                     {
-                        AddSpace();
+                        StringTool.AddSpace();
                         for (int i = 1; i < def.Fields.Count; i++)
                         {
-                            AppendLine(def.Fields[i].Name + " = " + def.Fields[i].Constant + ",");
+                            StringTool.AppendLine(def.Fields[i].Name + " = " + def.Fields[i].Constant + ",");
                         }
-                        DecSpace();
+                        StringTool.DecSpace();
                     }
-                    AppendLine("}");
-                    DecSpace();
+                    StringTool.AppendLine("}");
+                    StringTool.DecSpace();
                 }
-                AppendLine("}");
-                var outcs = GetStr();
+                StringTool.AppendLine("}");
+                var outcs = StringTool.GetStr();
                 System.IO.File.Delete(csfilepath);
                 System.IO.File.WriteAllText(csfilepath, outcs);
             }
 
             {//outts
-                NewStr();
-                AppendLine("module " + _namespace);
-                AppendLine("{");
+                StringTool.NewStr();
+                StringTool.AppendLine("module " + _namespace);
+                StringTool.AppendLine("{");
                 {
-                    AddSpace();
-                    AppendLine("export enum " + name);
-                    AppendLine("{");
+                    StringTool.AddSpace();
+                    StringTool.AppendLine("export enum " + name);
+                    StringTool.AppendLine("{");
                     {
-                        AddSpace();
+                        StringTool.AddSpace();
                         for (int i = 1; i < def.Fields.Count; i++)
                         {
-                            AppendLine(def.Fields[i].Name + " = " + def.Fields[i].Constant + ",");
+                            StringTool.AppendLine(def.Fields[i].Name + " = " + def.Fields[i].Constant + ",");
                         }
-                        DecSpace();
+                        StringTool.DecSpace();
                     }
-                    AppendLine("}");
-                    DecSpace();
+                    StringTool.AppendLine("}");
+                    StringTool.DecSpace();
                 }
-                AppendLine("}");
-                var outts = GetStr();
+                StringTool.AppendLine("}");
+                var outts = StringTool.GetStr();
                 System.IO.File.Delete(tsfilepath);
                 System.IO.File.WriteAllText(tsfilepath, outts);
             }
@@ -95,6 +96,7 @@ namespace recallunity
             if (_namespace == "")
                 _namespace = filter.destname;
             csLoader loader = new csLoader(csfilepath);
+            NameSpace _export = null;
             //交互导出
             if (loader.isFail == false && loader._namespace.name == _namespace && loader._namespace.types.ContainsKey(name))
             {
@@ -103,149 +105,150 @@ namespace recallunity
                 {
                     return;
                 }
+                _export = loader._namespace;
             }
-
-            string outtype = "";
+            else
+            {
+                _export = new NameSpace(_namespace);
+                _export.types[name] = new Type(name);
+            }
+            var _exporttype = _export.types[name];
+            _exporttype.desttypefullname = getFullName(def);
+            _exporttype.srctypefullname = _exporttype.desttypefullname.Replace(filter.destname, filter.srcname);
+            _exporttype.destnamespace = filter.destname;
+            _exporttype.srcnamespace = filter.srcname;
             if (type == TypeInfo.Typetype.type_interface)
-                outtype = "interface";
-            else if (type == TypeInfo.Typetype.type_struct || type == TypeInfo.Typetype.type_class)
-                outtype = "class";
-            {//outcs
-
-
-                NewStr();
-                AppendLine("namespace " + _namespace);
-                AppendLine("{");
-                {
-                    AddSpace();
-                    AppendLine("public " + outtype + " " + name);
-                    AppendLine("{");
-                    {
-                        AddSpace();
-                        //addcon
-                        int constcount = 0;
-                        for (int i = 0; i < def.Methods.Count; i++)
-                        {
-                            var m = def.Methods[i];
-                            if (m.IsPublic == false) continue;
-
-                            //if (exportname.Contains(m.Name)) continue;
-                            //exportname.Add(m.Name);
-                            if (m.IsConstructor)
-                            {
-                                constcount++;
-                                string call = "public " + name + "(";
-                                for (int j = 0; j < m.Parameters.Count; j++)
-                                {
-                                    if (j != 0) call += ",";
-                                    call += getFullName(m.Parameters[j].ParameterType) + " " + m.Parameters[j].Name;
-                                }
-                                AppendLine(call + ")");
-                                AppendLine("{");
-                                AppendLine("}");
-
-
-                            }
-                        }
-                        if (constcount > 1)
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }
-                        //AddField
-                        for (int i = 0; i < def.Fields.Count; i++)
-                        {
-                            var f = def.Fields[i];
-
-                            if (f.IsPublic == false) continue;
-                            if (exportname.Contains(f.Name)) continue;
-                            exportname.Add(f.Name);
-                            string type_name = getFullName(f.FieldType) + " " + f.Name;
-
-                            if (f.HasConstant)
-                            {
-                                type_name += " = " + f.Constant;
-                            }
-                            else
-                            {
-                                AppendLine("public " + type_name + ";");
-                            }
-                        }
-                        //AddProp
-                        for (int i = 0; i < def.Properties.Count; i++)
-                        {
-                            PropertyDefinition p = def.Properties[i];
-                            if (p.GetMethod.IsPublic == false) continue;
-                            if (exportname.Contains(p.Name)) continue;
-                            exportname.Add(p.Name);
-                            string type_name = getFullName(p.GetMethod.ReturnType) + " " + p.Name;
-                            if ((type == TypeInfo.Typetype.type_interface))
-                            {
-                                AppendLine(type_name);
-                            }
-                            else
-                            {
-                                AppendLine("public " + type_name);
-                            }
-                            AppendLine("{");
-                            {
-                                AddSpace();
-
-                                AppendLine("get;");
-                                //{
-                                //    AppendLine("{");
-                                //    {
-                                //        AddSpace();
-
-                                //        DecSpace();
-                                //    }
-                                //    AppendLine("}");
-                                //}
-                                if ((type == TypeInfo.Typetype.type_interface))
-                                {
-
-                                }
-                                else
-                                {
-                                    if (p.SetMethod != null && p.SetMethod.IsPublic)
-                                        AppendLine("set;");
-                                    else
-                                        AppendLine("private set;");
-                                }
-                                DecSpace();
-                            }
-                            AppendLine("}");
-                        }
-                        //add func
-                        for (int i = 0; i < def.Methods.Count; i++)
-                        {
-                            var m = def.Methods[i];
-                            if (m.IsPublic == false) continue;
-
-                            //if (exportname.Contains(m.Name)) continue;
-                            //exportname.Add(m.Name);
-                            if (m.IsConstructor)
-                            {
-
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        if (constcount > 1)
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }
-                        DecSpace();
-                    }
-                    AppendLine("}");
-                    DecSpace();
-                }
-                AppendLine("}");
-                var outcs = GetStr();
-                System.IO.File.Delete(csfilepath);
-                System.IO.File.WriteAllText(csfilepath, outcs);
+            {
+                _export.types[name].type = TypeInfo.Typetype.type_interface;
             }
+            else if (type == TypeInfo.Typetype.type_struct)
+            {
+                _export.types[name].type = TypeInfo.Typetype.type_class;
+                _export.types[name].attr["ExportAsStruct"] = new List<string>();//增加导出属性
+            }
+            else if (type == TypeInfo.Typetype.type_class)
+            {
+                _export.types[name].type = TypeInfo.Typetype.type_class;
+                _export.types[name].attr["ExportAsClassWarp"] = new List<string>();//增加导出属性
+            }
+            //重整代码结构
+            {
+                //增加一个warpfunc
+                {
+                    Method func = new Method(name);
+                    _exporttype.constructor = func;
+                    func.returntype = "void";
+                    func.paramstring["native"] = getFullName(def).Replace(filter.destname, filter.srcname);
+                    func.genmode = MethodGenMode.ConstructorFromNative;
+                }
+                //扫描函数
+                foreach (MethodDefinition md in def.Methods)
+                {
+                    if (md.IsPublic)
+                    {
+                        if (md.Name.IndexOf("set_") == 0) continue;
+                        if (md.Name.IndexOf("get_") == 0) continue;
+                        bool bskip = false;
+                        foreach (var p in md.Parameters)
+                        {
+                            if (p.ParameterType.IsGenericParameter)
+                            {
+                                bskip = true;
+                                break;
+                            }
+                            if(p.ParameterType.IsByReference)
+                            {
+                                bskip = true;
+                                break;
+
+                            }
+                        }
+                        if (bskip) continue;
+                        string funcname = md.Name;
+                        if (md.IsConstructor)
+                        {
+                            if (md.IsStatic)
+                                continue;
+                            else
+                            {
+                                for (int i = 1; i < 1000; i++)
+                                {
+                                    funcname = "CreateInstance_" + i.ToString();
+                                    if (_exporttype.methods.ContainsKey(funcname) == false) break;
+                                }
+                            }
+                        }
+
+                        Method func = new Method(funcname);
+                        _exporttype.methods[func.name] = func;
+                        if (md.IsConstructor)
+                        {//构造函数warp全部改为静态函数
+                            func.returntype = name;
+                            func.isstatic = true;
+                            func.genmode = MethodGenMode.Constructor_Warp;
+                            //func.warptype = getFullName(def).Replace(filter.destname, filter.srcname);
+                        }
+                        else
+                        {
+                            func.isstatic = md.IsStatic;
+                            func.genmode = MethodGenMode.ClassWarp;
+                            func.returntype = getFullName(md.ReturnType);
+                        }
+                        foreach (var p in md.Parameters)
+                        {
+                            string ptype = getFullName(p.ParameterType);
+                            string pname = p.Name;
+                            func.paramstring[pname] = ptype;
+                        }
+
+                    }
+                }
+
+                //增加一个warp attr
+                {
+                    var f = new Field("__warpValue");
+                    _exporttype.fields[f.name] = f;
+                    f.type = getFullName(def).Replace(filter.destname, filter.srcname);
+                    f.isstatic = false;
+                    f.genmode = FieldGenMode.WarpKeeper;
+                }
+                //Field直接加上去
+                foreach (FieldDefinition attr in def.Fields)
+                {
+
+                    if (attr.IsPublic == false) continue;
+                    _exporttype.fields[attr.Name] = new Field(attr.Name);
+                    _exporttype.fields[attr.Name].type = getFullName(attr.FieldType);
+                    _exporttype.fields[attr.Name].isstatic = attr.IsStatic;
+                    if (attr.HasConstant)
+                        _exporttype.fields[attr.Name].defvalue = attr.Constant.ToString();
+
+                    _exporttype.fields[attr.Name].genmode = FieldGenMode.PropWarp;
+
+
+                }
+
+                //prop 加上去
+                foreach (PropertyDefinition prop in def.Properties)
+                {
+                    if (prop.GetMethod.IsPublic == false) continue;
+                    _exporttype.props[prop.Name] = new Property(prop.Name);
+                    _exporttype.props[prop.Name].getter = new Method("getter");
+                    _exporttype.props[prop.Name].getter.returntype = getFullName(prop.GetMethod.ReturnType);
+                    if (prop.SetMethod != null && prop.SetMethod.IsPublic == true)
+                    {
+                        _exporttype.props[prop.Name].setter = new Method("setter");
+                    }
+                    else
+                    {
+                        _exporttype.props[prop.Name].setter = null;
+                    }
+                }
+            }
+            var outcs = _export.GenCsCode();
+            System.IO.File.Delete(csfilepath);
+            System.IO.File.WriteAllText(csfilepath, outcs);
+
         }
 
 

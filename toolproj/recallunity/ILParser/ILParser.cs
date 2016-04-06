@@ -27,7 +27,11 @@ namespace recallunity
             module = Mono.Cecil.ModuleDefinition.ReadModule(filename);
             foreach (TypeDefinition t in module.GetTypes())
             {
+                if (t.IsAbstract && t.IsClass) continue;
+                if (t.Name.Contains("Assert"))
+                {
 
+                }
                 if (t.IsPublic == false) continue;
                 if (t.Name.Contains("`")) continue;
                 TypeInfo _t = new TypeInfo(t);
@@ -213,6 +217,7 @@ namespace recallunity
             }
             else if (infos[type].type == TypeInfo.Typetype.type_interface || infos[type].type == TypeInfo.Typetype.type_struct || infos[type].type == TypeInfo.Typetype.type_class)
             {
+
                 Export_Def(def, infos[type].type, csfilepath, tsfilepath);
                 buildinfo[type].hasBuild = true;
             }
@@ -266,7 +271,12 @@ namespace recallunity
                     return "System.Collections.Generic.List<" + t0 + ">";
 
                 }
-                if(def.Name=="Func`1")
+                if (def.Name == "Func`1" )
+                {
+                    string tr = getFullName(gt.GenericArguments[0]);
+                    return "System.Func<" + tr + ">";
+                }
+                if (def.Name == "Func`1" || def.Name == "Action`1")
                 {
                     string t0 = getFullName(gt.GenericArguments[0]);
                     return "System.Action<" + t0 + ">";
@@ -291,39 +301,18 @@ namespace recallunity
             {
                 outname = "float";
             }
+            if (outname == "System.String")
+            {
+                outname = "string";
+            }
+            if (outname == "System.Void")
+            {
+                outname = "void";
+            }
             return outname;
         }
 
-        /// <summary>
-        /// 字符串拼接帮助类
-        /// </summary>
-        static StringBuilder sbuilder;
-        static void NewStr()
-        {
-            sbuilder = new StringBuilder();
-        }
-        static string GetStr()
-        {
-            return sbuilder.ToString();
-        }
-        static int space = 0;
-        static void AddSpace()
-        {
-            space += 4;
-        }
-        static void DecSpace()
-        {
-            space -= 4;
-        }
-        static void AppendLine(string text)
-        {
-            for (int i = 0; i < space; i++)
-            {
-                sbuilder.Append(" ");
-            }
-            sbuilder.Append(text);
-            sbuilder.AppendLine();
-        }
+
         //检查一个类型是否所有依赖类型均已导出
         private bool TypeReady(string type)
         {

@@ -23,8 +23,8 @@ namespace recallunity
             ILParser parser = new ILParser(new ConsoleLogger());
             parser.LoadDll("UnityEngine.dll");
             parser.ExportProj(new NameSpaceFilter("UnityEngine", "WebUnity"), "csproj", "tsproj");
-            Console.WriteLine("Press Enter to quit.");
-            Console.ReadLine();
+            //Console.WriteLine("Press Enter to quit.");
+            //Console.ReadLine();
         }
     }
 }

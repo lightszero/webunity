@@ -88,10 +88,8 @@
     <Compile Include="bin\csproj\ApplicationSandboxType.cs" />
     <Compile Include="bin\csproj\AreaEffector2D.cs" />
     <Compile Include="bin\csproj\AssemblyIsEditorAssembly.cs" />
-    <Compile Include="bin\csproj\Assertions.Assert.cs" />
     <Compile Include="bin\csproj\Assertions.AssertionException.cs" />
     <Compile Include="bin\csproj\Assertions.Comparers.FloatComparer.cs" />
-    <Compile Include="bin\csproj\Assertions.Must.MustExtensions.cs" />
     <Compile Include="bin\csproj\AssetBundle.cs" />
     <Compile Include="bin\csproj\AssetBundleCreateRequest.cs" />
     <Compile Include="bin\csproj\AssetBundleManifest.cs" />
@@ -197,7 +195,6 @@
     <Compile Include="bin\csproj\Cursor.cs" />
     <Compile Include="bin\csproj\CursorLockMode.cs" />
     <Compile Include="bin\csproj\CursorMode.cs" />
-    <Compile Include="bin\csproj\CustomYieldInstruction.cs" />
     <Compile Include="bin\csproj\Debug.cs" />
     <Compile Include="bin\csproj\DelayedAttribute.cs" />
     <Compile Include="bin\csproj\DepthTextureMode.cs" />
@@ -220,7 +217,6 @@
     <Compile Include="bin\csproj\EventModifiers.cs" />
     <Compile Include="bin\csproj\Events.PersistentListenerMode.cs" />
     <Compile Include="bin\csproj\Events.UnityEvent.cs" />
-    <Compile Include="bin\csproj\Events.UnityEventBase.cs" />
     <Compile Include="bin\csproj\Events.UnityEventCallState.cs" />
     <Compile Include="bin\csproj\EventType.cs" />
     <Compile Include="bin\csproj\ExecuteInEditMode.cs" />
@@ -341,7 +337,6 @@
     <Compile Include="bin\csproj\iOS.LocalNotification.cs" />
     <Compile Include="bin\csproj\iOS.NotificationServices.cs" />
     <Compile Include="bin\csproj\iOS.NotificationType.cs" />
-    <Compile Include="bin\csproj\iOS.OnDemandResources.cs" />
     <Compile Include="bin\csproj\iOS.OnDemandResourcesRequest.cs" />
     <Compile Include="bin\csproj\iOS.RemoteNotification.cs" />
     <Compile Include="bin\csproj\iOSActivityIndicatorStyle.cs" />
@@ -374,7 +369,6 @@
     <Compile Include="bin\csproj\JointSpring.cs" />
     <Compile Include="bin\csproj\JointSuspension2D.cs" />
     <Compile Include="bin\csproj\JointTranslationLimits2D.cs" />
-    <Compile Include="bin\csproj\JsonUtility.cs" />
     <Compile Include="bin\csproj\jvalue.cs" />
     <Compile Include="bin\csproj\KeyCode.cs" />
     <Compile Include="bin\csproj\Keyframe.cs" />
@@ -456,9 +450,6 @@
     <Compile Include="bin\csproj\Networking.Match.MatchDirectConnectInfo.cs" />
     <Compile Include="bin\csproj\Networking.Match.MatchInfo.cs" />
     <Compile Include="bin\csproj\Networking.Match.NetworkMatch.cs" />
-    <Compile Include="bin\csproj\Networking.Match.Request.cs" />
-    <Compile Include="bin\csproj\Networking.Match.Response.cs" />
-    <Compile Include="bin\csproj\Networking.Match.ResponseBase.cs" />
     <Compile Include="bin\csproj\Networking.Match.StopDedicatedMatchRequest.cs" />
     <Compile Include="bin\csproj\Networking.Match.StopDedicatedMatchResponse.cs" />
     <Compile Include="bin\csproj\Networking.NetworkError.cs" />
@@ -494,7 +485,6 @@
     <Compile Include="bin\csproj\ParticleAnimator.cs" />
     <Compile Include="bin\csproj\ParticleCollisionEvent.cs" />
     <Compile Include="bin\csproj\ParticleEmitter.cs" />
-    <Compile Include="bin\csproj\ParticlePhysicsExtensions.cs" />
     <Compile Include="bin\csproj\ParticleRenderer.cs" />
     <Compile Include="bin\csproj\ParticleRenderMode.cs" />
     <Compile Include="bin\csproj\ParticleSystem.cs" />
@@ -561,7 +551,6 @@
     <Compile Include="bin\csproj\ProceduralTexture.cs" />
     <Compile Include="bin\csproj\Profiler.cs" />
     <Compile Include="bin\csproj\Projector.cs" />
-    <Compile Include="bin\csproj\PropertyAttribute.cs" />
     <Compile Include="bin\csproj\QualityLevel.cs" />
     <Compile Include="bin\csproj\QualitySettings.cs" />
     <Compile Include="bin\csproj\Quaternion.cs" />
@@ -674,7 +663,6 @@
     <Compile Include="bin\csproj\Skybox.cs" />
     <Compile Include="bin\csproj\SleepTimeout.cs" />
     <Compile Include="bin\csproj\SliderJoint2D.cs" />
-    <Compile Include="bin\csproj\Social.cs" />
     <Compile Include="bin\csproj\SocialPlatforms.GameCenter.GameCenterPlatform.cs" />
     <Compile Include="bin\csproj\SocialPlatforms.IAchievement.cs" />
     <Compile Include="bin\csproj\SocialPlatforms.IAchievementDescription.cs" />
@@ -713,7 +701,6 @@
     <Compile Include="bin\csproj\Sprites.DataUtility.cs" />
     <Compile Include="bin\csproj\StackTraceLogType.cs" />
     <Compile Include="bin\csproj\StackTraceUtility.cs" />
-    <Compile Include="bin\csproj\StateMachineBehaviour.cs" />
     <Compile Include="bin\csproj\StaticBatchingUtility.cs" />
     <Compile Include="bin\csproj\SurfaceEffector2D.cs" />
     <Compile Include="bin\csproj\SystemInfo.cs" />
@@ -763,7 +750,6 @@
     <Compile Include="bin\csproj\TreePrototype.cs" />
     <Compile Include="bin\csproj\TypeInferenceRuleAttribute.cs" />
     <Compile Include="bin\csproj\TypeInferenceRules.cs" />
-    <Compile Include="bin\csproj\Types.cs" />
     <Compile Include="bin\csproj\UICharInfo.cs" />
     <Compile Include="bin\csproj\UILineInfo.cs" />
     <Compile Include="bin\csproj\UIVertex.cs" />

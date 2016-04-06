@@ -65,6 +65,7 @@
     <Compile Include="ILParser\ILParser_Export.cs" />
     <Compile Include="ILParser\ILParser.cs" />
     <Compile Include="ILParser\Info.cs" />
+    <Compile Include="ILParser\StringTool.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
