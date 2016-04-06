@@ -182,7 +182,17 @@ namespace recallunity
         public string oldname;
         public string returntype;
         public bool isstatic;
-        public Dictionary<string, string> paramstring = new Dictionary<string, string>();
+        public class ParamInfo
+        {
+            public string type;
+            public bool isenum;
+            public bool isdelegate;
+            public ParamInfo(string type)
+            {
+                this.type = type;
+            }
+        }
+        public Dictionary<string, ParamInfo> paramstring = new Dictionary<string, ParamInfo>();
         public string funccode;//函数代码，如果有要保留的代码，就不改写函数
         public MethodGenMode genmode = MethodGenMode.Empty;//函数生成模式
         //public string warptype;
@@ -196,7 +206,7 @@ namespace recallunity
                 for (int i = 0; i < paramstring.Count; i++)
                 {
                     if (i > 0) head += ",";
-                    head += paramstring.ToArray()[i].Value + " " + paramstring.ToArray()[i].Key;
+                    head += paramstring.ToArray()[i].Value.type + " " + paramstring.ToArray()[i].Key;
                 }
                 head += ")";
                 StringTool.AppendLine(head);
@@ -216,7 +226,7 @@ namespace recallunity
                 for (int i = 0; i < paramstring.Count; i++)
                 {
                     if (i > 0) head += ",";
-                    head += paramstring.ToArray()[i].Value + " " + paramstring.ToArray()[i].Key;
+                    head += paramstring.ToArray()[i].Value.type + " " + paramstring.ToArray()[i].Key;
                 }
                 head += ")";
                 StringTool.AppendLine(head);
@@ -232,7 +242,7 @@ namespace recallunity
                 for (int i = 0; i < paramstring.Count; i++)
                 {
                     if (i > 0) head += ",";
-                    head += paramstring.ToArray()[i].Value + " " + paramstring.ToArray()[i].Key;
+                    head += paramstring.ToArray()[i].Value.type + " " + paramstring.ToArray()[i].Key;
                 }
                 head += ")";
                 StringTool.AppendLine(head);
@@ -369,18 +379,26 @@ namespace recallunity
                 throw new Exception("not support opcode" + name);
             }
         }
-        string GetParamType(string paramtype)
+        string GetParamType(Method.ParamInfo paramtype)
         {
-            if (paramtype.Contains("&&"))
+            if (paramtype.type.Contains("&&"))
             {
-                return paramtype.Replace("&&", "");
+                return paramtype.type.Replace("&&", "");
             }
-            else if (paramtype.Contains("&"))
+            else if (paramtype.type.Contains("&"))
             {
-                return paramtype.Replace("&", "");
+                return paramtype.type.Replace("&", "");
 
             }
-            return paramtype;
+            return paramtype.type;
+        }
+        string GetReturnCall(Type type, Method.ParamInfo paramtype, string paramname)
+        {
+            if (paramtype.type.Contains(type.destnamespace))
+            {
+                return "new " + paramtype + "(" + paramname + ")";
+            }
+            return paramname;
         }
         string GetReturnCall(Type type, string paramtype, string paramname)
         {
@@ -390,15 +408,19 @@ namespace recallunity
             }
             return paramname;
         }
-        string GetParamCall(Type type, string paramtype, string paramname)
+        string GetParamCall(Type type, Method.ParamInfo paramtype, string paramname)
         {
-            if (paramtype.Contains(type.destnamespace))
+            if(paramtype.isenum)
             {
-                if (paramtype.Contains("&&"))
+                return "(" + paramtype.type.Replace(type.destnamespace,type.srcnamespace) + ")(int)" + paramname;
+            }
+            if (paramtype.type.Contains(type.destnamespace))
+            {
+                if (paramtype.type.Contains("&&"))
                 {
                     return "out " + paramname + ".__warpValue";
                 }
-                else if (paramtype.Contains("&"))
+                else if (paramtype.type.Contains("&"))
                 {
                     return "ref " + paramname + ".__warpValue";
                 }

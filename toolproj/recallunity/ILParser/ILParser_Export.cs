@@ -140,7 +140,13 @@ namespace recallunity
                     Method func = new Method(name);
                     _exporttype.constructor = func;
                     func.returntype = "void";
-                    func.paramstring["native"] = getFullName(def).Replace(filter.destname, filter.srcname);
+                    var _fulltype = getFullName(def).Replace(filter.destname, filter.srcname);
+
+                    func.paramstring["native"] = new Method.ParamInfo(_fulltype);
+                    //if (this.infos[_fulltype].type == TypeInfo.Typetype.type_enum)
+                    //{
+
+                    //}
                     func.genmode = MethodGenMode.ConstructorFromNative;
                 }
                 //扫描函数
@@ -160,7 +166,7 @@ namespace recallunity
                             {
                                 if (a.ConstructorArguments.Count > 1)
                                 {
-                                    if(((bool)a.ConstructorArguments[1].Value)==true)
+                                    if (((bool)a.ConstructorArguments[1].Value) == true)
                                     {
                                         bskip = true;//已经废弃的接口
                                     }
@@ -185,10 +191,14 @@ namespace recallunity
                                 continue;
                             else
                             {
-                                for (int i = 1; i < 1000; i++)
+                                funcname = "CreateInstance";
+                                if (_exporttype.methods.ContainsKey(funcname))
                                 {
-                                    funcname = "CreateInstance_" + i.ToString();
-                                    if (_exporttype.methods.ContainsKey(funcname) == false) break;
+                                    for (int i = 2; i < 1000; i++)
+                                    {
+                                        funcname = "CreateInstance_" + i.ToString();
+                                        if (_exporttype.methods.ContainsKey(funcname) == false) break;
+                                    }
                                 }
                             }
                         }
@@ -247,7 +257,17 @@ namespace recallunity
                                     ptype += "&";
                                 }
                             }
-                            func.paramstring[pname] = ptype;
+                            func.paramstring[pname] = new Method.ParamInfo(ptype);
+                            string _fulltype = ptype.Replace(filter.destname, filter.srcname);
+
+                            if (this.infos.ContainsKey(_fulltype))
+                            {
+                                if (this.infos[_fulltype].type == TypeInfo.Typetype.type_enum)
+                                    func.paramstring[pname].isenum = true;
+                                else if (this.infos[_fulltype].type == TypeInfo.Typetype.type_delegate)
+                                    func.paramstring[pname].isdelegate = true;
+                            }
+
                         }
 
                     }
