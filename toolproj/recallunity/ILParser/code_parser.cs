@@ -90,7 +90,7 @@ namespace recallunity
                 //add func
                 foreach (var m in methods)
                 {
-                    if (m.Value.genmode == MethodGenMode.ClassWarp || m.Value.genmode == MethodGenMode.Empty)
+                    if (m.Value.genmode == MethodGenMode.ClassWarp || m.Value.genmode == MethodGenMode.Empty || m.Value.genmode == MethodGenMode.Interface)
                         m.Value.GenCsCode(_namespace, this);
                 }
                 StringTool.DecSpace();
@@ -168,6 +168,7 @@ namespace recallunity
         Constructor_Warp,
         ConstructorFromNative,
         ClassWarp,
+        Interface,
     }
 
     public class Method
@@ -178,6 +179,7 @@ namespace recallunity
         }
 
         public string name;
+        public string oldname;
         public string returntype;
         public bool isstatic;
         public Dictionary<string, string> paramstring = new Dictionary<string, string>();
@@ -258,25 +260,52 @@ namespace recallunity
                 for (int i = 0; i < paramstring.Count; i++)
                 {
                     if (i > 0) head += ",";
-                    head += paramstring.ToArray()[i].Value + " " + paramstring.ToArray()[i].Key;
+                    head += GetParamType(paramstring.ToArray()[i].Value) + " " + paramstring.ToArray()[i].Key;
                 }
                 head += ")";
                 StringTool.AppendLine(head);
                 StringTool.AppendLine("{");
                 {
                     StringTool.AddSpace();
-                    string newline = (isstatic? (type.srctypefullname+"."): ("__warpValue.")) + name + "(";
-                    for (int i = 0; i < paramstring.Count; i++)
+
+                    string newline = null;
+                    if (name.IndexOf("op_") == 0)
                     {
-                        if (i > 0) newline += ",";
-                        var p = paramstring.ToArray()[i];
-                        newline += GetParamCall(type, p.Value, p.Key);
+                        string code = GetOpCode(name);
+                        if (paramstring.Count == 1)//一元
+                        {
+                            var p = paramstring.ToArray()[0];
+                            newline = code + GetParamCall(type, p.Value, p.Key);
+                        }
+                        else if (paramstring.Count == 2)//二元
+                        {
+                            var p = paramstring.ToArray()[0];
+                            var p2 = paramstring.ToArray()[1];
+                            newline =  GetParamCall(type, p.Value, p.Key) + " " + code +" " + GetParamCall(type, p2.Value, p2.Key);
+
+                        }
+                        else
+                        {
+                            throw new Exception("not support opcode" + name);
+
+                        }
+
                     }
-                    newline += ")";
+                    else
+                    {
+                        newline = (isstatic ? (type.srctypefullname + ".") : ("__warpValue.")) + oldname + "(";
+                        for (int i = 0; i < paramstring.Count; i++)
+                        {
+                            if (i > 0) newline += ",";
+                            var p = paramstring.ToArray()[i];
+                            newline += GetParamCall(type, p.Value, p.Key);
+                        }
+                        newline += ")";
+                    }
                     if (returntype != null && returntype != "void")
                     {
                         StringTool.AppendLine("var _out = " + newline + ";");
-                        StringTool.AppendLine("return " + GetReturnCall(type, returntype, "_out")+";");
+                        StringTool.AppendLine("return " + GetReturnCall(type, returntype, "_out") + ";");
                     }
                     else
                     {
@@ -286,10 +315,76 @@ namespace recallunity
                 }
                 StringTool.AppendLine("}");
             }
+            else if (genmode == MethodGenMode.Interface)
+            {
+                string head = "";
+                if (isstatic) head = "static ";
+                head += returntype + " " + name + "(";
+                for (int i = 0; i < paramstring.Count; i++)
+                {
+                    if (i > 0) head += ",";
+                    head += GetParamType(paramstring.ToArray()[i].Value) + " " + paramstring.ToArray()[i].Key;
+                }
+                head += ")";
+                StringTool.AppendLine(head+";");
+
+            }
+        }
+        string GetOpCode(string name)
+        {
+            if (name.Contains( "op_Addition"))
+            {
+                return "+";
+            }
+            else if (name.Contains("op_Subtraction"))
+            {
+                return "-";
+            }
+            else if (name.Contains("op_UnaryNegation"))
+            {
+                return "-";
+            }
+            else if (name.Contains("op_Multiply"))
+            {
+                return "*";
+            }
+            else if (name.Contains("op_Division"))
+            {
+                return "/";
+            }
+            else if (name.Contains("op_Equality"))
+            {
+                return "==";
+            }
+            else if (name.Contains("op_Inequality"))
+            {
+                return "!=";
+            }
+            else if(name.Contains("op_Implicit"))
+            {
+                return "";
+            }
+            else
+            {
+                throw new Exception("not support opcode" + name);
+            }
+        }
+        string GetParamType(string paramtype)
+        {
+            if (paramtype.Contains("&&"))
+            {
+                return paramtype.Replace("&&", "");
+            }
+            else if (paramtype.Contains("&"))
+            {
+                return paramtype.Replace("&", "");
+
+            }
+            return paramtype;
         }
         string GetReturnCall(Type type, string paramtype, string paramname)
         {
-            if(paramtype.Contains(type.destnamespace))
+            if (paramtype.Contains(type.destnamespace))
             {
                 return "new " + paramtype + "(" + paramname + ")";
             }
@@ -299,7 +394,16 @@ namespace recallunity
         {
             if (paramtype.Contains(type.destnamespace))
             {
-                return paramname + ".__warpValue";
+                if (paramtype.Contains("&&"))
+                {
+                    return "out " + paramname + ".__warpValue";
+                }
+                else if (paramtype.Contains("&"))
+                {
+                    return "ref " + paramname + ".__warpValue";
+                }
+                else
+                    return paramname + ".__warpValue";
             }
             return paramname;
         }

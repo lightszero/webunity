@@ -34,6 +34,25 @@ namespace recallunity
                 }
                 if (t.IsPublic == false) continue;
                 if (t.Name.Contains("`")) continue;
+                bool bskip = false;
+                if(t.HasCustomAttributes)
+                {
+                    foreach(var tt in t.CustomAttributes)
+                    {
+                        if(tt.AttributeType.Name== "ObsoleteAttribute")
+                        {
+                            if (tt.ConstructorArguments.Count > 1)
+                            {
+                                if (((bool)tt.ConstructorArguments[1].Value) == true)
+                                {
+                                    bskip = true;//已经废弃的接口
+                                }
+                            }
+                        }
+                    }
+                }
+                if (bskip) continue;
+
                 TypeInfo _t = new TypeInfo(t);
                 infos[t.FullName] = _t;
 
@@ -185,7 +204,8 @@ namespace recallunity
                     }
                     else
                     {
-                        throw new Exception("not find type:" + t);
+                        return false;
+                        //throw new Exception("not find type:" + t);
                     }
                 }
             }
@@ -265,13 +285,13 @@ namespace recallunity
                     return "System.Collections.Generic.Dictionary<" + t0 + "," + t1 + ">";
 
                 }
-                if (def.Name == "List`1" || def.Name == "IList`1")
+                if (def.Name == "List`1" || def.Name == "IList`1" || def.Name == "IEnumerable`1")
                 {
                     string t0 = getFullName(gt.GenericArguments[0]);
                     return "System.Collections.Generic.List<" + t0 + ">";
 
                 }
-                if (def.Name == "Func`1" )
+                if (def.Name == "Func`1")
                 {
                     string tr = getFullName(gt.GenericArguments[0]);
                     return "System.Func<" + tr + ">";

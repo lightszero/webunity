@@ -45,11 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bin\csproj\AccelerationEvent.cs" />
-    <Compile Include="bin\csproj\ADBannerView.cs" />
-    <Compile Include="bin\csproj\ADBannerView_Layout.cs" />
-    <Compile Include="bin\csproj\ADBannerView_Type.cs" />
     <Compile Include="bin\csproj\AddComponentMenu.cs" />
-    <Compile Include="bin\csproj\ADInterstitialAd.cs" />
     <Compile Include="bin\csproj\AnchoredJoint2D.cs" />
     <Compile Include="bin\csproj\AndroidActivityIndicatorStyle.cs" />
     <Compile Include="bin\csproj\AndroidInput.cs" />
@@ -66,7 +62,6 @@
     <Compile Include="bin\csproj\AnimationCullingType.cs" />
     <Compile Include="bin\csproj\AnimationCurve.cs" />
     <Compile Include="bin\csproj\AnimationEvent.cs" />
-    <Compile Include="bin\csproj\AnimationInfo.cs" />
     <Compile Include="bin\csproj\AnimationPlayMode.cs" />
     <Compile Include="bin\csproj\AnimationState.cs" />
     <Compile Include="bin\csproj\Animation_Enumerator.cs" />
@@ -137,8 +132,6 @@
     <Compile Include="bin\csproj\BuoyancyEffector2D.cs" />
     <Compile Include="bin\csproj\CacheIndex.cs" />
     <Compile Include="bin\csproj\Caching.cs" />
-    <Compile Include="bin\csproj\CalendarIdentifier.cs" />
-    <Compile Include="bin\csproj\CalendarUnit.cs" />
     <Compile Include="bin\csproj\Camera.cs" />
     <Compile Include="bin\csproj\CameraClearFlags.cs" />
     <Compile Include="bin\csproj\CameraType.cs" />
@@ -339,21 +332,7 @@
     <Compile Include="bin\csproj\iOS.NotificationType.cs" />
     <Compile Include="bin\csproj\iOS.OnDemandResourcesRequest.cs" />
     <Compile Include="bin\csproj\iOS.RemoteNotification.cs" />
-    <Compile Include="bin\csproj\iOSActivityIndicatorStyle.cs" />
-    <Compile Include="bin\csproj\iPhone.cs" />
-    <Compile Include="bin\csproj\iPhoneAccelerationEvent.cs" />
-    <Compile Include="bin\csproj\iPhoneGeneration.cs" />
-    <Compile Include="bin\csproj\iPhoneInput.cs" />
-    <Compile Include="bin\csproj\iPhoneKeyboard.cs" />
-    <Compile Include="bin\csproj\iPhoneKeyboardType.cs" />
-    <Compile Include="bin\csproj\iPhoneMovieControlMode.cs" />
-    <Compile Include="bin\csproj\iPhoneMovieScalingMode.cs" />
-    <Compile Include="bin\csproj\iPhoneNetworkReachability.cs" />
-    <Compile Include="bin\csproj\iPhoneOrientation.cs" />
-    <Compile Include="bin\csproj\iPhoneScreenOrientation.cs" />
     <Compile Include="bin\csproj\iPhoneSettings.cs" />
-    <Compile Include="bin\csproj\iPhoneTouch.cs" />
-    <Compile Include="bin\csproj\iPhoneTouchPhase.cs" />
     <Compile Include="bin\csproj\iPhoneUtils.cs" />
     <Compile Include="bin\csproj\ISerializationCallbackReceiver.cs" />
     <Compile Include="bin\csproj\Joint.cs" />
@@ -386,7 +365,6 @@
     <Compile Include="bin\csproj\LightShadows.cs" />
     <Compile Include="bin\csproj\LightType.cs" />
     <Compile Include="bin\csproj\LineRenderer.cs" />
-    <Compile Include="bin\csproj\LocalNotification.cs" />
     <Compile Include="bin\csproj\LocationInfo.cs" />
     <Compile Include="bin\csproj\LocationService.cs" />
     <Compile Include="bin\csproj\LocationServiceStatus.cs" />
@@ -472,7 +450,6 @@
     <Compile Include="bin\csproj\NetworkStateSynchronization.cs" />
     <Compile Include="bin\csproj\NetworkView.cs" />
     <Compile Include="bin\csproj\NetworkViewID.cs" />
-    <Compile Include="bin\csproj\NotificationServices.cs" />
     <Compile Include="bin\csproj\NPOTSupport.cs" />
     <Compile Include="bin\csproj\Object.cs" />
     <Compile Include="bin\csproj\ObstacleAvoidanceType.cs" />
@@ -570,8 +547,6 @@
     <Compile Include="bin\csproj\RectTransform_Edge.cs" />
     <Compile Include="bin\csproj\ReflectionProbe.cs" />
     <Compile Include="bin\csproj\RelativeJoint2D.cs" />
-    <Compile Include="bin\csproj\RemoteNotification.cs" />
-    <Compile Include="bin\csproj\RemoteNotificationType.cs" />
     <Compile Include="bin\csproj\RenderBuffer.cs" />
     <Compile Include="bin\csproj\Renderer.cs" />
     <Compile Include="bin\csproj\Rendering.AmbientMode.cs" />

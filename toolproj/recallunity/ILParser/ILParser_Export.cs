@@ -134,6 +134,8 @@ namespace recallunity
             //重整代码结构
             {
                 //增加一个warpfunc
+
+                if (type != TypeInfo.Typetype.type_interface)
                 {
                     Method func = new Method(name);
                     _exporttype.constructor = func;
@@ -146,22 +148,34 @@ namespace recallunity
                 {
                     if (md.IsPublic)
                     {
+                        if (md.HasGenericParameters) continue;
+                        if (md.ReturnType.IsGenericInstance) continue;
                         if (md.Name.IndexOf("set_") == 0) continue;
                         if (md.Name.IndexOf("get_") == 0) continue;
                         bool bskip = false;
+
+                        foreach (var a in md.CustomAttributes)
+                        {
+                            if (a.AttributeType.Name == "ObsoleteAttribute")
+                            {
+                                if (a.ConstructorArguments.Count > 1)
+                                {
+                                    if(((bool)a.ConstructorArguments[1].Value)==true)
+                                    {
+                                        bskip = true;//已经废弃的接口
+                                    }
+                                }
+                            }
+                        }
+
                         foreach (var p in md.Parameters)
                         {
-                            if (p.ParameterType.IsGenericParameter)
+                            if (p.ParameterType.IsGenericParameter)//带模板的不要了
                             {
                                 bskip = true;
                                 break;
                             }
-                            if(p.ParameterType.IsByReference)
-                            {
-                                bskip = true;
-                                break;
 
-                            }
                         }
                         if (bskip) continue;
                         string funcname = md.Name;
@@ -178,8 +192,30 @@ namespace recallunity
                                 }
                             }
                         }
+                        string oldname = funcname;
+                        if (_exporttype.methods.ContainsKey(funcname))
+                        {
+                            if (char.IsNumber(funcname.Last()))
+                            {
+                                int clipi = funcname.LastIndexOf("_");
+                                if (clipi > 0)
+                                {
+                                    funcname = funcname.Substring(0, clipi);
+                                }
+                            }
+                            for (int i = 2; i < 1000; i++)
+                            {
+                                string outf = funcname + "_" + i;
+                                if (_exporttype.methods.ContainsKey(outf) == false)
+                                {
+                                    funcname = outf;
+                                    break;
+                                }
+                            }
 
+                        }
                         Method func = new Method(funcname);
+                        func.oldname = oldname;
                         _exporttype.methods[func.name] = func;
                         if (md.IsConstructor)
                         {//构造函数warp全部改为静态函数
@@ -187,6 +223,12 @@ namespace recallunity
                             func.isstatic = true;
                             func.genmode = MethodGenMode.Constructor_Warp;
                             //func.warptype = getFullName(def).Replace(filter.destname, filter.srcname);
+                        }
+                        else if (type == TypeInfo.Typetype.type_interface)
+                        {
+                            func.isstatic = md.IsStatic;
+                            func.genmode = MethodGenMode.Interface;
+                            func.returntype = getFullName(md.ReturnType);
                         }
                         else
                         {
@@ -198,6 +240,13 @@ namespace recallunity
                         {
                             string ptype = getFullName(p.ParameterType);
                             string pname = p.Name;
+                            if (p.ParameterType.IsByReference)
+                            {
+                                if (p.IsOut)
+                                {
+                                    ptype += "&";
+                                }
+                            }
                             func.paramstring[pname] = ptype;
                         }
 
@@ -205,6 +254,7 @@ namespace recallunity
                 }
 
                 //增加一个warp attr
+                if (type != TypeInfo.Typetype.type_interface)
                 {
                     var f = new Field("__warpValue");
                     _exporttype.fields[f.name] = f;
