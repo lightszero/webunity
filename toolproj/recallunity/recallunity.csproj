@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="exportattr\ConvertTool.cs" />
     <Compile Include="exportattr\exportattr.cs" />
     <Compile Include="ILParser\code_parser.cs" />
     <Compile Include="ILParser\csLoader.cs" />

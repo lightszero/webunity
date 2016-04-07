@@ -149,6 +149,16 @@ namespace recallunity
                     //}
                     func.genmode = MethodGenMode.ConstructorFromNative;
                 }
+                //增加要给clonefunc
+                if (type == TypeInfo.Typetype.type_struct)
+                {
+                    Method func = new Method("Clone");
+                    _exporttype.methods[func.name] = func;
+                    func.returntype = getFullName(def);
+
+                    func.genmode = MethodGenMode.CloneWarp;
+
+                }
                 //扫描函数
                 foreach (MethodDefinition md in def.Methods)
                 {
@@ -259,13 +269,15 @@ namespace recallunity
                             }
                             func.paramstring[pname] = new Method.ParamInfo(ptype);
                             string _fulltype = ptype.Replace(filter.destname, filter.srcname);
-
+                            if (p.ParameterType.IsArray)
+                                func.paramstring[pname].isarray = true;
                             if (this.infos.ContainsKey(_fulltype))
                             {
                                 if (this.infos[_fulltype].type == TypeInfo.Typetype.type_enum)
                                     func.paramstring[pname].isenum = true;
                                 else if (this.infos[_fulltype].type == TypeInfo.Typetype.type_delegate)
                                     func.paramstring[pname].isdelegate = true;
+
                             }
 
                         }
@@ -318,6 +330,10 @@ namespace recallunity
             var outcs = _export.GenCsCode();
             System.IO.File.Delete(csfilepath);
             System.IO.File.WriteAllText(csfilepath, outcs);
+
+            var outts = _export.GenTsCode();
+            System.IO.File.Delete(tsfilepath);
+            System.IO.File.WriteAllText(tsfilepath, outts);
 
         }
 

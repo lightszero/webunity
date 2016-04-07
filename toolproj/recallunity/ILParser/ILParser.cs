@@ -65,8 +65,12 @@ namespace recallunity
         {
             if (t.HasNestedTypes)
             {
+
                 foreach (var nt in t.NestedTypes)
                 {
+
+                    if (nt.IsNestedPublic == false) continue;
+                    if (nt.HasGenericParameters) continue;
                     if (nt.Name.Contains("`")) continue;
 
                     TypeInfo _nt = new TypeInfo(nt);

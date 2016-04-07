@@ -29,7 +29,22 @@ namespace recallunity
             StringTool.AppendLine("}");
             return StringTool.GetStr();
         }
-
+        public string GenTsCode()
+        {
+            StringTool.NewStr();
+            StringTool.AppendLine("module " + name);
+            StringTool.AppendLine("{");
+            {
+                StringTool.AddSpace();
+                foreach (var t in types)
+                {
+                    t.Value.GenTsCode(this);
+                }
+                StringTool.DecSpace();
+            }
+            StringTool.AppendLine("}");
+            return StringTool.GetStr();
+        }
     }
     public class Type//所有的type都是 public的
     {
@@ -73,7 +88,7 @@ namespace recallunity
                 }
                 foreach (var m in methods)
                 {
-                    if (m.Value.genmode == MethodGenMode.Constructor_Warp)
+                    if (m.Value.genmode == MethodGenMode.Constructor_Warp||m.Value.genmode== MethodGenMode.CloneWarp)
                         m.Value.GenCsCode(_namespace, this);
                 }
                 //AddField
@@ -96,6 +111,10 @@ namespace recallunity
                 StringTool.DecSpace();
             }
             StringTool.AppendLine("}");
+
+        }
+        public void GenTsCode(NameSpace _namespace)
+        {
 
         }
     }
@@ -169,6 +188,7 @@ namespace recallunity
         ConstructorFromNative,
         ClassWarp,
         Interface,
+        CloneWarp,
     }
 
     public class Method
@@ -187,6 +207,7 @@ namespace recallunity
             public string type;
             public bool isenum;
             public bool isdelegate;
+            public bool isarray;
             public ParamInfo(string type)
             {
                 this.type = type;
@@ -198,6 +219,7 @@ namespace recallunity
         //public string warptype;
         public virtual void GenCsCode(NameSpace names, Type type)
         {
+
             if (genmode == MethodGenMode.ConstructorFromNative)
             {
                 string head = "";
@@ -291,7 +313,7 @@ namespace recallunity
                         {
                             var p = paramstring.ToArray()[0];
                             var p2 = paramstring.ToArray()[1];
-                            newline =  GetParamCall(type, p.Value, p.Key) + " " + code +" " + GetParamCall(type, p2.Value, p2.Key);
+                            newline = GetParamCall(type, p.Value, p.Key) + " " + code + " " + GetParamCall(type, p2.Value, p2.Key);
 
                         }
                         else
@@ -336,13 +358,23 @@ namespace recallunity
                     head += GetParamType(paramstring.ToArray()[i].Value) + " " + paramstring.ToArray()[i].Key;
                 }
                 head += ")";
-                StringTool.AppendLine(head+";");
+                StringTool.AppendLine(head + ";");
 
+            }
+            else if (genmode == MethodGenMode.CloneWarp)
+            {
+                string head = "public " + returntype + " " + name + "()";
+                StringTool.AppendLine(head);
+                StringTool.AppendLine("{");
+                StringTool.AddSpace();
+                StringTool.AppendLine("return new " + returntype + "(__warpValue);");
+                StringTool.DecSpace();
+                StringTool.AppendLine("}");
             }
         }
         string GetOpCode(string name)
         {
-            if (name.Contains( "op_Addition"))
+            if (name.Contains("op_Addition"))
             {
                 return "+";
             }
@@ -370,7 +402,7 @@ namespace recallunity
             {
                 return "!=";
             }
-            else if(name.Contains("op_Implicit"))
+            else if (name.Contains("op_Implicit"))
             {
                 return "";
             }
@@ -392,16 +424,25 @@ namespace recallunity
             }
             return paramtype.type;
         }
-        string GetReturnCall(Type type, Method.ParamInfo paramtype, string paramname)
-        {
-            if (paramtype.type.Contains(type.destnamespace))
-            {
-                return "new " + paramtype + "(" + paramname + ")";
-            }
-            return paramname;
-        }
+        //string GetReturnCall(Type type, Method.ParamInfo paramtype, string paramname)
+        //{
+        //    if (paramtype.type.Contains(type.destnamespace))
+        //    {
+        //        return "new " + paramtype + "(" + paramname + ")";
+        //    }
+        //    return paramname;
+        //}
         string GetReturnCall(Type type, string paramtype, string paramname)
         {
+            if (paramtype.Last() == ']')//isarray
+            {
+                string lasttype = paramtype.Replace(type.destnamespace, type.srcnamespace);
+                if (lasttype == paramtype)
+                    return paramname;
+                else
+                    return "ConvertTool.ConvertArray<" + paramtype.Substring(0, paramtype.Length - 2) + "," + lasttype.Substring(0, lasttype.Length - 2) + ">(" + paramname + ")";
+
+            }
             if (paramtype.Contains(type.destnamespace))
             {
                 return "new " + paramtype + "(" + paramname + ")";
@@ -410,9 +451,18 @@ namespace recallunity
         }
         string GetParamCall(Type type, Method.ParamInfo paramtype, string paramname)
         {
-            if(paramtype.isenum)
+            if (paramtype.isarray)
             {
-                return "(" + paramtype.type.Replace(type.destnamespace,type.srcnamespace) + ")(int)" + paramname;
+                string lasttype = paramtype.type.Replace(type.destnamespace, type.srcnamespace);
+                if (lasttype == paramtype.type)
+                    return paramname;
+                else
+                    return "ConvertTool.ConvertArray<" + lasttype.Substring(0, lasttype.Length - 2) + "," + paramtype.type.Substring(0, paramtype.type.Length - 2) + ">(" + paramname + ")";
+
+            }
+            if (paramtype.isenum)
+            {
+                return "(" + paramtype.type.Replace(type.destnamespace, type.srcnamespace) + ")(int)" + paramname;
             }
             if (paramtype.type.Contains(type.destnamespace))
             {

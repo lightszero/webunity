@@ -20,6 +20,8 @@ namespace recallunity
         [STAThread]
         static void Main()
         {
+            //代码辅助生成工具，cs2cs 就酱紫了。
+            //接下来辅助生成ts端代码
             ILParser parser = new ILParser(new ConsoleLogger());
             parser.LoadDll("UnityEngine.dll");
             parser.ExportProj(new NameSpaceFilter("UnityEngine", "WebUnity"), "csproj", "tsproj");
