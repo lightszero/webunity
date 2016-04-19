@@ -88,7 +88,7 @@ namespace recallunity
                 }
                 foreach (var m in methods)
                 {
-                    if (m.Value.genmode == MethodGenMode.Constructor_Warp||m.Value.genmode== MethodGenMode.CloneWarp)
+                    if (m.Value.genmode == MethodGenMode.Constructor_Warp || m.Value.genmode == MethodGenMode.CloneWarp)
                         m.Value.GenCsCode(_namespace, this);
                 }
                 //AddField
@@ -131,54 +131,113 @@ namespace recallunity
             this.name = name;
         }
         public bool isstatic;
+        public bool isconst;
         public string name;
         public string type;
         public string defvalue = null;
         public FieldGenMode genmode = FieldGenMode.Normal;
         public virtual void GenCsCode(NameSpace names, Type type)
         {
-            //{
-            //    var f = def.Fields[i];
-
-            //    if (f.IsPublic == false) continue;
-            //    if (exportname.Contains(f.Name)) continue;
-            //    exportname.Add(f.Name);
-            //    string type_name = getFullName(f.FieldType) + " " + f.Name;
-            string outstr = "public ";
-            if (this.isstatic)
-                outstr += "static ";
-            if (defvalue == null)
-                StringTool.AppendLine(outstr + this.type + " " + name + ";");
-            else
+            if (genmode == FieldGenMode.WarpKeeper || genmode == FieldGenMode.Normal || (this.isconst && this.defvalue != null))
             {
-                if (defvalue == "∞")
+                //{
+                //    var f = def.Fields[i];
+
+                //    if (f.IsPublic == false) continue;
+                //    if (exportname.Contains(f.Name)) continue;
+                //    exportname.Add(f.Name);
+                //    string type_name = getFullName(f.FieldType) + " " + f.Name;
+                string outstr = "public ";
+                if (this.isconst)
+                    outstr += "const ";
+
+                else if (this.isstatic)
+                    outstr += "static ";
+                if (defvalue == null)
+                    StringTool.AppendLine(outstr + this.type + " " + name + ";");
+                else
                 {
-                    outstr += this.type + " " + name + " = " + "float.PositiveInfinity";
+                    if (defvalue == "∞")
+                    {
+                        outstr += this.type + " " + name + " = " + "float.PositiveInfinity";
+                    }
+                    else if (defvalue == "-∞")
+                    {
+                        outstr += this.type + " " + name + " = " + "float.NegativeInfinity";
+                    }
+                    else if (this.type == "string")
+                    {
+                        outstr += this.type + " " + name + " = \"" + defvalue + "\"";
+                    }
+                    else
+                    {
+                        outstr += this.type + " " + name + " = " + defvalue;
+                        if (this.type == "float" && defvalue.Last() != 'f')
+                            outstr += "f";
+                    }
+
+                    StringTool.AppendLine(outstr + ";");
                 }
-                else if (defvalue == "-∞")
+                //    {
+                //        type_name += " = " + f.Constant;
+                //    }
+                //    else
+                //    {
+                //    }
+                //}
+            }
+            else if(genmode== FieldGenMode.PropWarp)//将field翻译为prop
+            {
+                StringTool.AppendLine("//from field");
+
+                if (isstatic)
                 {
-                    outstr += this.type + " " + name + " = " + "float.NegativeInfinity";
-                }
-                else if (this.type == "string")
-                {
-                    outstr += this.type + " " + name + " = \"" + defvalue + "\"";
+                    StringTool.AppendLine("public static " + this.type + " " + this.name);
                 }
                 else
                 {
-                    outstr += this.type + " " + name + " = " + defvalue;
-                    if (this.type == "float" && defvalue.Last() != 'f')
-                        outstr += "f";
+                    StringTool.AppendLine("public " + this.type + " " + this.name);
                 }
 
-                StringTool.AppendLine(outstr + ";");
+                StringTool.AppendLine("{");
+                {
+                    StringTool.AddSpace();
+
+                    StringTool.AppendLine("get");
+                    {
+                        StringTool.AppendLine("{");
+                        {
+                            StringTool.AddSpace();
+                            string scode = isstatic ? type.srctypefullname + "." + name : "__warpValue." + name;
+                            string v = recallunity.Method.GetReturnCall(type, this.type, scode);
+                            StringTool.AppendLine("return " + v + ";");
+                            StringTool.DecSpace();
+                        }
+                        StringTool.AppendLine("}");
+                    }
+
+                    {
+
+                        StringTool.AppendLine("set");
+                        StringTool.AppendLine("{");
+                        {
+                            StringTool.AddSpace();
+                            string scode = isstatic ? type.srctypefullname + "." + name : "__warpValue." + name;
+                            if (this.type.Contains(type.destnamespace))
+                                StringTool.AppendLine(scode + "=value.__warpValue;");
+                            else
+                                StringTool.AppendLine(scode + "=value;");
+
+                            StringTool.DecSpace();
+                        }
+                        StringTool.AppendLine("}");
+                    }
+
+                    StringTool.DecSpace();
+                }
+                StringTool.AppendLine("}");
+
             }
-            //    {
-            //        type_name += " = " + f.Constant;
-            //    }
-            //    else
-            //    {
-            //    }
-            //}
         }
     }
     public enum MethodGenMode
@@ -411,7 +470,7 @@ namespace recallunity
                 throw new Exception("not support opcode" + name);
             }
         }
-        string GetParamType(Method.ParamInfo paramtype)
+        public static string GetParamType(Method.ParamInfo paramtype)
         {
             if (paramtype.type.Contains("&&"))
             {
@@ -432,7 +491,7 @@ namespace recallunity
         //    }
         //    return paramname;
         //}
-        string GetReturnCall(Type type, string paramtype, string paramname)
+        public static string GetReturnCall(Type type, string paramtype, string paramname)
         {
             if (paramtype.Last() == ']')//isarray
             {
@@ -449,7 +508,7 @@ namespace recallunity
             }
             return paramname;
         }
-        string GetParamCall(Type type, Method.ParamInfo paramtype, string paramname)
+        public static string GetParamCall(Type type, Method.ParamInfo paramtype, string paramname)
         {
             if (paramtype.isarray)
             {
@@ -488,43 +547,75 @@ namespace recallunity
             this.name = name;
         }
         public string name;
+        public bool isstatic;
         public Method getter;
         public Method setter = null;//setter can be null      
         public virtual void GenCsCode(NameSpace names, Type type)
         {
+            //for interface;
             if ((type.type == TypeInfo.Typetype.type_interface))
             {
                 StringTool.AppendLine(getter.returntype + " " + this.name);
+                StringTool.AppendLine("{");
+                {
+                    StringTool.AddSpace();
+
+                    StringTool.AppendLine("get;");
+
+                    if (setter != null)
+                        StringTool.AppendLine("set;");
+
+                    StringTool.DecSpace();
+                }
+                StringTool.AppendLine("}");
+
+                return;
+            }
+
+            if (isstatic)
+            {
+                StringTool.AppendLine("public static " + getter.returntype + " " + this.name);
             }
             else
             {
                 StringTool.AppendLine("public " + getter.returntype + " " + this.name);
             }
+
             StringTool.AppendLine("{");
             {
                 StringTool.AddSpace();
 
-                StringTool.AppendLine("get;");
-                //{
-                //    AppendLine("{");
-                //    {
-                //        AddSpace();
+                StringTool.AppendLine("get");
+                {
+                    StringTool.AppendLine("{");
+                    {
+                        StringTool.AddSpace();
+                        string scode = isstatic ? type.srctypefullname + "." + name : "__warpValue." + name;
+                        string v = recallunity.Method.GetReturnCall(type, getter.returntype, scode);
+                        StringTool.AppendLine("return " + v + ";");
+                        StringTool.DecSpace();
+                    }
+                    StringTool.AppendLine("}");
+                }
 
-                //        DecSpace();
-                //    }
-                //    AppendLine("}");
-                //}
-                if ((type.type == TypeInfo.Typetype.type_interface))
+                if (setter != null)
                 {
 
+                    StringTool.AppendLine("set");
+                    StringTool.AppendLine("{");
+                    {
+                        StringTool.AddSpace();
+                        string scode = isstatic ? type.srctypefullname + "." + name : "__warpValue." + name;
+                        if (getter.returntype.Contains(type.destnamespace))
+                            StringTool.AppendLine(scode + "=value.__warpValue;");
+                        else
+                            StringTool.AppendLine(scode + "=value;");
+
+                        StringTool.DecSpace();
+                    }
+                    StringTool.AppendLine("}");
                 }
-                else
-                {
-                    if (setter != null)
-                        StringTool.AppendLine("set;");
-                    else
-                        StringTool.AppendLine("private set;");
-                }
+
                 StringTool.DecSpace();
             }
             StringTool.AppendLine("}");

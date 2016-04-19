@@ -299,9 +299,12 @@ namespace recallunity
                 {
 
                     if (attr.IsPublic == false) continue;
+
                     _exporttype.fields[attr.Name] = new Field(attr.Name);
                     _exporttype.fields[attr.Name].type = getFullName(attr.FieldType);
                     _exporttype.fields[attr.Name].isstatic = attr.IsStatic;
+                    _exporttype.fields[attr.Name].isconst = attr.IsLiteral;
+
                     if (attr.HasConstant)
                         _exporttype.fields[attr.Name].defvalue = attr.Constant.ToString();
 
@@ -313,8 +316,29 @@ namespace recallunity
                 //prop 加上去
                 foreach (PropertyDefinition prop in def.Properties)
                 {
+                    bool bskip = false;
+                    foreach (var tt in prop.CustomAttributes)
+                    {
+                        if (tt.AttributeType.Name == "ObsoleteAttribute")
+                        {
+                            if (tt.ConstructorArguments.Count > 1)
+                            {
+                                if (((bool)tt.ConstructorArguments[1].Value) == true)
+                                {
+                                    bskip = true;//已经废弃的接口
+                                }
+                            }
+                        }
+                    }
+                    if (bskip) continue;
+
+                    if (prop.HasParameters)//有参数的属性，多半是index访问器
+                    { 
+                        continue;
+                    }
                     if (prop.GetMethod.IsPublic == false) continue;
                     _exporttype.props[prop.Name] = new Property(prop.Name);
+                    _exporttype.props[prop.Name].isstatic = prop.GetMethod.IsStatic;
                     _exporttype.props[prop.Name].getter = new Method("getter");
                     _exporttype.props[prop.Name].getter.returntype = getFullName(prop.GetMethod.ReturnType);
                     if (prop.SetMethod != null && prop.SetMethod.IsPublic == true)
